@@ -48,14 +48,17 @@ class Bgp(ABC):
 
             # iosxr: router bgp 100 [instance someword](config-bgp)
             with configurations.submode_context(attributes.format(line,
-                                                                  force=True)):
-                if unconfig:
-                    if (attributes.attributes and \
-                      'instance_name' in attributes.attributes and \
-                      isinstance(attributes.attributes['instance_name'], dict) and \
-                      None in attributes.attributes['instance_name'].values()) or \
-                      attributes.iswildcard:
-                        configurations.submode_unconfig()
+                                                                      force=True)):
+                if unconfig and (
+                    (
+                        attributes.attributes
+                        and 'instance_name' in attributes.attributes
+                        and isinstance(attributes.attributes['instance_name'], dict)
+                        and None in attributes.attributes['instance_name'].values()
+                    )
+                    or attributes.iswildcard
+                ):
+                    configurations.submode_unconfig()
 
                 # iosxr: router bgp 100 [instance someword] / nsr
                 # iosxr: router bgp 100 [instance someword] / nsr disable

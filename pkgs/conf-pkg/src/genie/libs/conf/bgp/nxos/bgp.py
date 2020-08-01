@@ -816,8 +816,8 @@ class Bgp(ABC):
                     configurations = CliConfigBuilder(unconfig=unconfig)
 
                     with configurations.submode_context(
-                        attributes.format('neighbor {neighbor}',
-                                          force=True)):
+                            attributes.format('neighbor {neighbor}',
+                                              force=True)):
                         if unconfig and attributes.iswildcard:
                             # Never reached!
                             configurations.submode_unconfig()
@@ -855,12 +855,13 @@ class Bgp(ABC):
                         # nxos: neighbor <neighbor_id> \
                         # ebgp-multihop <nbr_ebgp_multihop_max_hop>
                         # no ebgp-multihop [<nbr_ebgp_multihop_max_hop>]
-                        if attributes.value('nbr_ebgp_multihop'):
-                            if attributes.value('nbr_ebgp_multihop_max_hop'):
-                                configurations.append_line(
-                                    attributes.format('ebgp-multihop '
-                                        '{nbr_ebgp_multihop_max_hop}'),
-                                        unconfig_cmd='default ebgp-multihop')
+                        if attributes.value('nbr_ebgp_multihop') and attributes.value(
+                            'nbr_ebgp_multihop_max_hop'
+                        ):
+                            configurations.append_line(
+                                attributes.format('ebgp-multihop '
+                                    '{nbr_ebgp_multihop_max_hop}'),
+                                    unconfig_cmd='default ebgp-multihop')
 
                         # nxos: neighbor <neighbor_id> \
                         # ebgp-multihop <ebgp_multihop_max_hop_count>
@@ -895,13 +896,13 @@ class Bgp(ABC):
 
                         if attributes.value('nbr_local_as_as_no'):
                             if attributes.value('nbr_local_as_no_prepend'):
-                                if attributes.value('nbr_local_as_replace_as'):
-                                    if attributes.value(
-                                        'nbr_local_as_dual_as'):
-                                        configurations.append_line(
-                                            attributes.format('local-as '
-                                            '{nbr_local_as_as_no} no-prepend '
-                                            'replace-as dual-as'))
+                                if attributes.value(
+                                    'nbr_local_as_replace_as'
+                                ) and attributes.value('nbr_local_as_dual_as'):
+                                    configurations.append_line(
+                                        attributes.format('local-as '
+                                        '{nbr_local_as_as_no} no-prepend '
+                                        'replace-as dual-as'))
                             else:
                                 configurations.append_line(
                                     attributes.format('local-as '
@@ -990,9 +991,9 @@ class Bgp(ABC):
                         configurations = CliConfigBuilder(unconfig=unconfig)
 
                         with configurations.submode_context(
-                            attributes.format('address-family '
-                                              '{address_family.value}',
-                                              force=True)):
+                                attributes.format('address-family '
+                                                  '{address_family.value}',
+                                                  force=True)):
                             if unconfig and attributes.iswildcard:
                                 # Never reached!
                                 configurations.submode_unconfig()
@@ -1032,16 +1033,14 @@ class Bgp(ABC):
                                 'nbr_af_maximum_prefix_max_prefix_no'):
                                 if attributes.value(
                                     'nbr_af_maximum_prefix_threshold'):
-                                    if attributes.value(
-                                        'nbr_af_maximum_prefix_restart'):
-                                        if v:
-                                            configurations.append_line(
-                                                attributes.format(
-                                    'maximum-prefix '
-                                    '{nbr_af_maximum_prefix_max_prefix_no}'
-                                    ' restart '
-                                    '{nbr_af_maximum_prefix_restart} '
-                                    '{nbr_af_maximum_prefix_warning_only}'))
+                                    if attributes.value('nbr_af_maximum_prefix_restart') and v:
+                                                configurations.append_line(
+                                                    attributes.format(
+                                        'maximum-prefix '
+                                        '{nbr_af_maximum_prefix_max_prefix_no}'
+                                        ' restart '
+                                        '{nbr_af_maximum_prefix_restart} '
+                                        '{nbr_af_maximum_prefix_warning_only}'))
                                 else:
                                     configurations.append_line(
                                         attributes.format('maximum-prefix '

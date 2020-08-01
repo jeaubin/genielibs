@@ -173,24 +173,26 @@ class Acl(ABC):
                     self.acl_name = self.parent.acl_name
 
                     with configurations.submode_context(
-                        attributes.format('interface {interface_id}', force=True)): 
-                    
-                        if attributes.value('if_in') and 'ipv4' in self.parent.acl_type:
-                            configurations.append_line(
-                                attributes.format('ip access-group {acl_name} in', force=True))
-                        elif attributes.value('if_in') and 'ipv6' in self.parent.acl_type:
-                            configurations.append_line(
-                                attributes.format('ipv6 traffic-filter {acl_name} in', force=True))
-                        elif attributes.value('if_in') and 'eth' in self.parent.acl_type:
-                            configurations.append_line(
-                                attributes.format('mac access-group {acl_name} in', force=True))
+                            attributes.format('interface {interface_id}', force=True)): 
 
-                        if attributes.value('if_out') and 'ipv4' in self.parent.acl_type:
-                            configurations.append_line(
-                                attributes.format('ip access-group {acl_name} out', force=True))
-                        elif attributes.value('if_out') and 'ipv6' in self.parent.acl_type:
-                            configurations.append_line(
-                                attributes.format('ipv6 traffic-filter {acl_name} out', force=True))
+                        if attributes.value('if_in'):
+                            if 'ipv4' in self.parent.acl_type:
+                                configurations.append_line(
+                                    attributes.format('ip access-group {acl_name} in', force=True))
+                            elif 'ipv6' in self.parent.acl_type:
+                                configurations.append_line(
+                                    attributes.format('ipv6 traffic-filter {acl_name} in', force=True))
+                            elif 'eth' in self.parent.acl_type:
+                                configurations.append_line(
+                                    attributes.format('mac access-group {acl_name} in', force=True))
+
+                        if attributes.value('if_out'):
+                            if 'ipv4' in self.parent.acl_type:
+                                configurations.append_line(
+                                    attributes.format('ip access-group {acl_name} out', force=True))
+                            elif 'ipv6' in self.parent.acl_type:
+                                configurations.append_line(
+                                    attributes.format('ipv6 traffic-filter {acl_name} out', force=True))
 
                     return str(configurations)
 

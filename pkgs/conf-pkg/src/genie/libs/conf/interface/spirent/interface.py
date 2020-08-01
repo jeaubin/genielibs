@@ -116,11 +116,7 @@ class Interface(genie.libs.conf.interface.hltapi.Interface):
                     raise UnknownInterfaceTypeError
             else:
                 # Based on a Spirent physical port.
-                if d_parsed.subintf:
-                    factory_cls = SubInterface
-                else:
-                    factory_cls = PhysicalInterface
-
+                factory_cls = SubInterface if d_parsed.subintf else PhysicalInterface
         if factory_cls is not cls:
             self = factory_cls.__new__(factory_cls, *args, **kwargs)
         elif super().__new__ is object.__new__:
@@ -206,23 +202,16 @@ class PhysicalInterface(Interface,
             if unconfig:
 
                 if self.tgen_port_configured:
-                    if False:
-                        hltkwargs = self._build_interface_config_hltkwargs(
-                            attributes=attributes, unconfig=True)
-                        if hltkwargs:
-                            hltkl = hltapi.interface_config(**hltkwargs)
-                            bNeedStcApply = False
-                    else:
-                        # Spirent HLTAPI drops the whole port instead of the "port_address" host on the port. Do this ourselves... {{{
-                        for host_handle in hltapi.stc_get(
-                                self.tgen_port_handle, '-AffiliationPort-Sources',
-                                cast_=functools.partial(
-                                    hltapi.tcl.cast_list, item_cast=tclstr)):
-                            if hltapi.stc_get(host_handle,
-                                              '-Name',
-                                              cast_=tclstr) == 'port_address':
-                                hltapi.stc_delete(host_handle)
-                                bNeedStcApply = True
+                    # Spirent HLTAPI drops the whole port instead of the "port_address" host on the port. Do this ourselves... {{{
+                    for host_handle in hltapi.stc_get(
+                            self.tgen_port_handle, '-AffiliationPort-Sources',
+                            cast_=functools.partial(
+                                hltapi.tcl.cast_list, item_cast=tclstr)):
+                        if hltapi.stc_get(host_handle,
+                                          '-Name',
+                                          cast_=tclstr) == 'port_address':
+                            hltapi.stc_delete(host_handle)
+                            bNeedStcApply = True
                     self.tgen_port_configured = False
 
             else:
@@ -270,16 +259,20 @@ class PhysicalInterface(Interface,
                                 '-AffiliationPort-Sources',
                                 cast_=functools.partial(hltapi.tcl.cast_list,
                                                         item_cast=tclstr)):
-                            if hltapi.stc_get(host_handle,
-                                              '-Name',
-                                              cast_=tclstr) == 'port_address':
-                                if not hltapi.stc_get(host_handle,
-                                                      '-EnablePingResponse',
-                                                      cast_=tclstr) != 'TRUE':
-                                    hltapi.stc_config(host_handle,
-                                                      '-EnablePingResponse',
-                                                      'TRUE')
-                                    bNeedStcApply = True
+                            if (
+                                hltapi.stc_get(host_handle, '-Name', cast_=tclstr)
+                                == 'port_address'
+                                and hltapi.stc_get(
+                                    host_handle,
+                                    '-EnablePingResponse',
+                                    cast_=tclstr,
+                                )
+                                == 'TRUE'
+                            ):
+                                hltapi.stc_config(host_handle,
+                                                  '-EnablePingResponse',
+                                                  'TRUE')
+                                bNeedStcApply = True
 
         finally:
             if bNeedStcApply:

@@ -44,9 +44,7 @@ class Device(HltapiDevice, genie.libs.conf.device.ios.Device):
             if self.tcl.cast_boolean(kwargs.get('vlan', True)) is False:
                 kwargs.pop('vlan')
 
-            hltkl = self.pyats_connection.interface_config(**kwargs)
-
-            return hltkl
+            return self.pyats_connection.interface_config(**kwargs)
 
         def traffic_config(self, **kwargs):
 
@@ -248,9 +246,7 @@ class Device(HltapiDevice, genie.libs.conf.device.ios.Device):
                     # only the specified ports
                     del kwargs['streams']
 
-            hltkl = self.pyats_connection.traffic_stats(**kwargs)
-
-            return hltkl
+            return self.pyats_connection.traffic_stats(**kwargs)
 
         def traffic_control(self, **kwargs):
 

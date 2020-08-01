@@ -95,7 +95,7 @@ class PrefixList(ABC):
                         if min_val < max_val:
                             cfg_str += ' le {}'.format(max_val)
                     elif mask < min_val:
-                        if max_val == 32 or max_val == 128:
+                        if max_val in [32, 128]:
                             cfg_str += ' ge {}'.format(min_val)
                         else:
                             cfg_str += ' ge {a} le {b}'.format(a=min_val, b=max_val)

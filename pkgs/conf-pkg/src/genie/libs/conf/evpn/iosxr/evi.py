@@ -110,13 +110,12 @@ class Evi(ABC):
                             configurations.append_line('route-target export none')
 
                     # iosxr: evpn / evi 1 / bgp / route-target import none
-                    if attributes.value('import_route_target_none'):
-                        if attributes.value('export_route_target_none', force=True):
-                            pass  # Already done above
-                        else:
-                            configurations.append_line('route-target import none')
+                    if attributes.value(
+                        'import_route_target_none'
+                    ) and not attributes.value('export_route_target_none', force=True):
+                        configurations.append_line('route-target import none')
 
-                    # iosxr: evpn / evi 1 / bgp / table-policy <rtepol>
+                            # iosxr: evpn / evi 1 / bgp / table-policy <rtepol>
 
             return str(configurations)
 

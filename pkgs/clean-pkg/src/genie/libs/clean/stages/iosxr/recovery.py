@@ -28,14 +28,12 @@ def sendbrk_handler(spawn, break_count):
             None
     '''
 
-    count = 1
     xr_patterns = IOSXRPatterns()
-    while count <= break_count:
+    for _ in range(1, break_count + 1):
         spawn.send("\035")
         spawn.expect([xr_patterns.telnet_prompt])
         spawn.send("send brk\r\r")
         time.sleep(1)
-        count += 1
 
 
 def recovery_worker(*args, **kwargs):
@@ -176,10 +174,10 @@ def tftp_recover_from_rommon(spawn, session, context, device_name,
         'tftp_server': 'TFTP_SERVER',
     }
 
-    for item in mapping_list:
+    for item, value in mapping_list.items():
         log.info("\nSet '{}' to {}".format(mapping_list[item], context[item]))
         try:
-            spawn.sendline("{}={}".format(mapping_list[item], context[item]))
+            spawn.sendline("{}={}".format(value, context[item]))
         except Exception as e:
             log.error(str(e))
             raise Exception("Unable to set {}={}".format(item, goto=['exit']))

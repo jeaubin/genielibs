@@ -586,13 +586,13 @@ class Bgp(ABC):
                     configurations = CliConfigBuilder(unconfig=unconfig)
 
                     with configurations.submode_context(
-                        attributes.format(
-                            'address-family {address_family.value} '
-                            'vrf {vrf_name}',
-                            force=True) if self.vrf_name != 'default' else \
-                        attributes.format(
-                            'address-family {address_family.value}',
-                            force=True)):
+                            attributes.format(
+                                'address-family {address_family.value} '
+                                'vrf {vrf_name}',
+                                force=True) if self.vrf_name != 'default' else \
+                            attributes.format(
+                                'address-family {address_family.value}',
+                                force=True)):
 
                         if unconfig and attributes.iswildcard:
                             if attributes.value('address_family') is not None:
@@ -709,7 +709,7 @@ class Bgp(ABC):
                                 'af_redist_static_route_policy'):
                                 cfg += ' route-map '\
                                        '{af_redist_static_route_policy}'
-                        
+
                         if cfg:
                             configurations.append_line(
                                 attributes.format(cfg))
@@ -729,7 +729,7 @@ class Bgp(ABC):
                                 'af_redist_connected_route_policy'):
                                 cfg += ' route-map '\
                                        '{af_redist_connected_route_policy}'
-                        
+
                         if cfg:
                             configurations.append_line(
                                 attributes.format(cfg))
@@ -766,12 +766,12 @@ class Bgp(ABC):
                         # iosxe: address-family ipv4 unicast/
                         # bgp nexthop trigger delay critical
                         # <af_nexthop_trigger_delay_critical>
-                        if attributes.value('af_nexthop_trigger_enable'):
-                            if attributes.value(
-                                'af_nexthop_trigger_delay_critical'):
-                                configurations.append_line(attributes.format(
-                                    'bgp nexthop trigger delay '
-                                    '{af_nexthop_trigger_delay_critical}'))
+                        if attributes.value('af_nexthop_trigger_enable') and attributes.value(
+                            'af_nexthop_trigger_delay_critical'
+                        ):
+                            configurations.append_line(attributes.format(
+                                'bgp nexthop trigger delay '
+                                '{af_nexthop_trigger_delay_critical}'))
 
                         # iosxe: address-family ipv4 unicast/
                         # bgp client-to-client reflection
@@ -783,14 +783,16 @@ class Bgp(ABC):
                         # iosxe: address-family ipv4 unicast/
                         # distance bgp <af_distance_extern_as> 
                         # <af_distance_internal_as> <af_distance_local>
-                        if attributes.value('af_distance_extern_as'):
-                            if attributes.value('af_distance_internal_as') and\
-                                 attributes.value('af_distance_local') :
-                                configurations.append_line(
-                                    attributes.format(
-                                        'distance bgp {af_distance_extern_as} '
-                                        '{af_distance_internal_as} '
-                                        '{af_distance_local}'))
+                        if (
+                            attributes.value('af_distance_extern_as')
+                            and attributes.value('af_distance_internal_as')
+                            and attributes.value('af_distance_local')
+                        ):
+                            configurations.append_line(
+                                attributes.format(
+                                    'distance bgp {af_distance_extern_as} '
+                                    '{af_distance_internal_as} '
+                                    '{af_distance_local}'))
 
                         # iosxe: address-family ipv4 unicast/ 
                         # maximum-paths <af_maximum_paths_ebgp>
@@ -976,14 +978,14 @@ class Bgp(ABC):
 
                         # iosxe: neighbor <neighbor_id>
                         # ebgp-multihop <nbr_ebgp_multihop_max_hop>
-                        if attributes.value('nbr_ebgp_multihop'):
-                            if attributes.value(
-                                'nbr_ebgp_multihop_max_hop'):
-                                configurations.append_line(
-                                    attributes.format('neighbor {neighbor}'
-                                        ' ebgp-multihop '
-                                        '{nbr_ebgp_multihop_max_hop}',
-                                        force=True))
+                        if attributes.value('nbr_ebgp_multihop') and attributes.value(
+                            'nbr_ebgp_multihop_max_hop'
+                        ):
+                            configurations.append_line(
+                                attributes.format('neighbor {neighbor}'
+                                    ' ebgp-multihop '
+                                    '{nbr_ebgp_multihop_max_hop}',
+                                    force=True))
 
                         # iosxe: neighbor <neighbor_id> inherit
                         # peer-session <nbr_inherit_peer_session>
@@ -1185,13 +1187,13 @@ class Bgp(ABC):
                         configurations = CliConfigBuilder(unconfig=unconfig)
 
                         with configurations.submode_context(
-                            attributes.format(
-                                'address-family {address_family.value} '
-                                'vrf {vrf_name}',
-                                force=True) if self.vrf_name != 'default' else\
-                            attributes.format(
-                                'address-family {address_family.value}',
-                                force=True)):
+                                attributes.format(
+                                    'address-family {address_family.value} '
+                                    'vrf {vrf_name}',
+                                    force=True) if self.vrf_name != 'default' else\
+                                attributes.format(
+                                    'address-family {address_family.value}',
+                                    force=True)):
 
                             if unconfig and attributes.iswildcard:
                                 configurations.submode_unconfig()
@@ -1381,14 +1383,14 @@ class Bgp(ABC):
 
                                 # iosxe: neighbor <neighbor_id>
                                 # ebgp-multihop <nbr_ebgp_multihop_max_hop>
-                                if attributes.value('nbr_ebgp_multihop'):
-                                    if attributes.value(
-                                        'nbr_ebgp_multihop_max_hop'):
-                                        configurations.append_line(
-                                            attributes.format('neighbor '
-                                                '{neighbor} ebgp-multihop '
-                                                '{nbr_ebgp_multihop_max_hop}',
-                                                force=True))
+                                if attributes.value('nbr_ebgp_multihop') and attributes.value(
+                                    'nbr_ebgp_multihop_max_hop'
+                                ):
+                                    configurations.append_line(
+                                        attributes.format('neighbor '
+                                            '{neighbor} ebgp-multihop '
+                                            '{nbr_ebgp_multihop_max_hop}',
+                                            force=True))
 
                                 # iosxe: neighbor <neighbor_id> inherit
                                 # peer-session <nbr_inherit_peer_session>

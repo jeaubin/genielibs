@@ -317,21 +317,27 @@ class Device(HltapiDevice):
             # -port_handle is mandatory, use the Spirent-specific "all" value
             kwargs.setdefault('port_handle', ['all'])
 
-            if kwargs.get('action', None) == 'stop':
-                if int(self.tcl.eval('package vcompare [package present SpirentHltApi] 3.70')) >= 0:
-                    # Tell STC HLTAPI 3.70+ to not save the EOT results database
-                    # This takes a long time and fails most of the time.
-                    kwargs.setdefault('db_file', 0)
+            if (
+                kwargs.get('action', None) == 'stop'
+                and int(
+                    self.tcl.eval(
+                        'package vcompare [package present SpirentHltApi] 3.70'
+                    )
+                )
+                >= 0
+            ):
+                # Tell STC HLTAPI 3.70+ to not save the EOT results database
+                # This takes a long time and fails most of the time.
+                kwargs.setdefault('db_file', 0)
 
             hltkl = self.pyats_connection.traffic_control(**kwargs)
 
             if kwargs.get('action', None) == 'poll' and 'stopped' not in hltkl:
-                stopped = True
-                for k, v in hltkl.items():
-                    if re.match(r'^port.*-generator.*$', k):
-                        if v != 'STOPPED':
-                            stopped = False
-                            break
+                stopped = not any(
+                    re.match(r'^port.*-generator.*$', k) and v != 'STOPPED'
+                    for k, v in hltkl.items()
+                )
+
                 stopped = 1 if stopped else 0
                 logger.debug('Spirent: setting hltkl stopped = %r', stopped)
                 hltkl.stopped = stopped

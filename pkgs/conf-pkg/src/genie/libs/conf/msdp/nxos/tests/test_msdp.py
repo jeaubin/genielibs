@@ -215,8 +215,7 @@ class test_msdp(TestCase):
         testbed = Testbed()
         dev = Device(testbed=testbed, name='PE2', os='nxos')
         dev.custom = {'abstraction':{'order':['os'], 'context':'cli'}}
-        dev.mapping={}
-        dev.mapping['cli']='cli'
+        dev.mapping = {'cli': 'cli'}
         # Give the device as a connection type
         # This is done in order to call the parser on the output provided
         dev.connectionmgr.connections['cli'] = dev

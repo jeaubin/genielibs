@@ -66,13 +66,15 @@ class Mld(ABC):
                     configurations.append_line(attributes.format(cfg_str, force=True))
 
                 # ipv6 mld [vrf <vrf>] ssm-map enable
-                if hasattr(attributes.value('ssm'), 'data'):
-                    if attributes.value('ssm').data:
-                        cfg_str = 'ipv6 mld ssm-map enable' \
-                            if self.vrf_id == 'default' else \
-                                'ipv6 mld vrf {} ssm-map enable'.format(self.vrf_id)
+                if (
+                    hasattr(attributes.value('ssm'), 'data')
+                    and attributes.value('ssm').data
+                ):
+                    cfg_str = 'ipv6 mld ssm-map enable' \
+                        if self.vrf_id == 'default' else \
+                            'ipv6 mld vrf {} ssm-map enable'.format(self.vrf_id)
 
-                        configurations.append_line(attributes.format(cfg_str))
+                    configurations.append_line(attributes.format(cfg_str))
 
                 # Ssm Attributes under vrf level config
                 for ssm, attributes2 in attributes.sequence_values('ssm', sort=True):

@@ -92,9 +92,7 @@ class Ldp(ABC):
                 configurations.append_line(attributes.format('igp sync delay on-proc-restart {igp_sync_delay_on_proc_restart}'))
 
                 # iosxr: mpls ldp / igp sync delay on-session-up 5
-                if attributes.value('igp_sync_delay_on_session_up') is False:
-                    pass
-                else:
+                if attributes.value('igp_sync_delay_on_session_up') is not False:
                     configurations.append_line(attributes.format('igp sync delay on-session-up {igp_sync_delay_on_session_up}'))
 
                 # iosxr: mpls ldp / nsr

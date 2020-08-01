@@ -81,11 +81,7 @@ class Vlan(ABC):
                 for cfg in vlan_config:
                   cfg.apply()
             else:
-                ydks = []
-                for cfg in vlan_config:
-                  ydks.append(cfg)
-
-                return ydks
+                return [cfg for cfg in vlan_config]
 
         def build_unconfig(self, apply=True, attributes=None, **kwargs):
             return self.build_config(apply=apply, attributes=attributes,

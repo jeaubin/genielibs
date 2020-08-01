@@ -76,17 +76,9 @@ class Hsrp(ABC):
             if apply:
                 for interface in hsrp_config:
                     interface.apply()
-            
-            else:
-                ydks = []
-                if unconfig:
-                    for interface in hsrp_config:
-                        ydks.append(interface)
-                else:
-                    for interface in hsrp_config:
-                        ydks.append(interface)
 
-                return ydks
+            else:
+                return [interface for interface in hsrp_config]
 
         def build_unconfig(self, apply=True, attributes=None, **kwargs):
             return self.build_config(apply=apply, attributes=attributes,

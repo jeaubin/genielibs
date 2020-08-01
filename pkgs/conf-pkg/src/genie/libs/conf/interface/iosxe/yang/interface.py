@@ -198,9 +198,7 @@ class LoopbackInterface(VirtualInterface, genie.libs.conf.interface.LoopbackInte
         keep = string.digits
         ydk_obj.name =  int(''.join(i for i in attributes.value('name') if i in keep))
 
-        if unconfig and attributes.iswildcard:
-            pass
-        else:
+        if not unconfig or not attributes.iswildcard:
             ipv4 = attributes.value('ipv4')
             if ipv4:
                 ydk_obj.ip.address.primary.address = str(ipv4.ip)

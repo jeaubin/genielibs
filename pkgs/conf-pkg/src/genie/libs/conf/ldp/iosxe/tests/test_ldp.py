@@ -69,15 +69,14 @@ class test_ldp(unittest.TestCase):
 
         # ==Test interface-only config==
         out = ldp.build_config(apply=False)
-        if 1:
-            self.assertRegex(str(out['PE1']), 'interface GigabitEthernet0/0/1')
-            self.assertRegex(str(out['PE1']), 'interface GigabitEthernet0/0/3')
-            self.assertRegex(str(out['PE1']), 'interface GigabitEthernet0/0/5')
-            self.assertRegex(str(out['PE1']), 'interface GigabitEthernet0/0/7')
-            self.assertRegex(str(out['PE2']), 'interface GigabitEthernet0/0/2')
-            self.assertRegex(str(out['PE2']), 'interface GigabitEthernet0/0/4')
-            self.assertRegex(str(out['PE2']), 'interface GigabitEthernet0/0/6')
-            self.assertRegex(str(out['PE2']), 'interface GigabitEthernet0/0/8')
+        self.assertRegex(str(out['PE1']), 'interface GigabitEthernet0/0/1')
+        self.assertRegex(str(out['PE1']), 'interface GigabitEthernet0/0/3')
+        self.assertRegex(str(out['PE1']), 'interface GigabitEthernet0/0/5')
+        self.assertRegex(str(out['PE1']), 'interface GigabitEthernet0/0/7')
+        self.assertRegex(str(out['PE2']), 'interface GigabitEthernet0/0/2')
+        self.assertRegex(str(out['PE2']), 'interface GigabitEthernet0/0/4')
+        self.assertRegex(str(out['PE2']), 'interface GigabitEthernet0/0/6')
+        self.assertRegex(str(out['PE2']), 'interface GigabitEthernet0/0/8')
 
     def test_1_top_level(self):
 
@@ -112,59 +111,55 @@ class test_ldp(unittest.TestCase):
         ldp.session_protection_for_acl = acl1
 
         out = ldp.build_config(apply=False)
-        if 1:
-            self.assertCountEqual(out.keys(), ['PE1', 'PE2'])
-            self.assertMultiLineEqual(str(out['PE1']), '\n'.join([
-                'mpls label protocol ldp',
-                'mpls ip',
-                'mpls ldp nsr',
-                'mpls ldp graceful-restart',
-                'mpls ldp graceful-restart timers forwarding-holding 60',
-                'mpls ldp discovery hello interval 200',
-                'mpls ldp discovery hello holdtime 100',
-                'mpls ldp discovery targeted-hello accept',
-                'mpls ldp session protection for 1 222',
-                'interface GigabitEthernet0/0/1',
-                ' mpls ip',
-                ' exit',
-            ]))
+        self.assertCountEqual(out.keys(), ['PE1', 'PE2'])
+        self.assertMultiLineEqual(str(out['PE1']), '\n'.join([
+            'mpls label protocol ldp',
+            'mpls ip',
+            'mpls ldp nsr',
+            'mpls ldp graceful-restart',
+            'mpls ldp graceful-restart timers forwarding-holding 60',
+            'mpls ldp discovery hello interval 200',
+            'mpls ldp discovery hello holdtime 100',
+            'mpls ldp discovery targeted-hello accept',
+            'mpls ldp session protection for 1 222',
+            'interface GigabitEthernet0/0/1',
+            ' mpls ip',
+            ' exit',
+        ]))
 
-            self.assertMultiLineEqual(str(out['PE2']), '\n'.join([
-                'mpls label protocol ldp',
-                'mpls ip',
-                'mpls ldp nsr',
-                'mpls ldp graceful-restart',
-                'mpls ldp graceful-restart timers forwarding-holding 60',
-                'mpls ldp discovery hello interval 200',
-                'mpls ldp discovery hello holdtime 100',
-                'mpls ldp discovery targeted-hello accept',
-                'mpls ldp session protection for 1 333',
-                'interface GigabitEthernet0/0/2',
-                ' mpls ip',
-                ' exit',
-            ]))
+        self.assertMultiLineEqual(str(out['PE2']), '\n'.join([
+            'mpls label protocol ldp',
+            'mpls ip',
+            'mpls ldp nsr',
+            'mpls ldp graceful-restart',
+            'mpls ldp graceful-restart timers forwarding-holding 60',
+            'mpls ldp discovery hello interval 200',
+            'mpls ldp discovery hello holdtime 100',
+            'mpls ldp discovery targeted-hello accept',
+            'mpls ldp session protection for 1 333',
+            'interface GigabitEthernet0/0/2',
+            ' mpls ip',
+            ' exit',
+        ]))
 
-        if 1:
-            # set the per-attr variables that are inherited by VRF
-            ldp.device_attr['PE1'].vrf_attr['default'].router_id = self.i1
-            ldp.device_attr['PE2'].vrf_attr['default'].router_id = self.i2
+        # set the per-attr variables that are inherited by VRF
+        ldp.device_attr['PE1'].vrf_attr['default'].router_id = self.i1
+        ldp.device_attr['PE2'].vrf_attr['default'].router_id = self.i2
 
-            out = ldp.build_config(apply=False)
-            self.assertRegex(str(out['PE1']), 'router-id GigabitEthernet0/0/1')
+        out = ldp.build_config(apply=False)
+        self.assertRegex(str(out['PE1']), 'router-id GigabitEthernet0/0/1')
 
-            self.assertRegex(str(out['PE2']), 'router-id GigabitEthernet0/0/2')
+        self.assertRegex(str(out['PE2']), 'router-id GigabitEthernet0/0/2')
 
         # Check unconfig - <nsr> config filter
         out = ldp.build_unconfig(apply=False, attributes='device_attr__*__nsr')
-        if 1:
-            self.assertRegex(str(out['PE1']), 'no mpls ldp nsr')
-            self.assertRegex(str(out['PE2']), 'no mpls ldp nsr')
+        self.assertRegex(str(out['PE1']), 'no mpls ldp nsr')
+        self.assertRegex(str(out['PE2']), 'no mpls ldp nsr')
 
         # Check unconfig - <gr> config filter=
         out = ldp.build_unconfig(apply=False, attributes='device_attr__*__gr')
-        if 1:
-            self.assertRegex(str(out['PE1']), 'no mpls ldp graceful-restart')
-            self.assertRegex(str(out['PE2']), 'no mpls ldp graceful-restart')
+        self.assertRegex(str(out['PE1']), 'no mpls ldp graceful-restart')
+        self.assertRegex(str(out['PE2']), 'no mpls ldp graceful-restart')
 
     def test_2_per_vrf(self):
 
@@ -292,33 +287,31 @@ class test_ldp(unittest.TestCase):
 
         # ==Test per interface config===
         out = ldp.build_config(apply=False)
-        if 1:
-
-            self.assertMultiLineEqual(str(out['PE1']), '\n'.join([
-                'mpls label protocol ldp',
-                'mpls ip',
-                'mpls ldp discovery hello interval 88',
-                'interface GigabitEthernet0/0/1',
-                ' mpls ip',
-                ' exit',
-                'interface GigabitEthernet0/0/7',
-                ' mpls ip',
-                ' exit',
-            ]))
+        self.assertMultiLineEqual(str(out['PE1']), '\n'.join([
+            'mpls label protocol ldp',
+            'mpls ip',
+            'mpls ldp discovery hello interval 88',
+            'interface GigabitEthernet0/0/1',
+            ' mpls ip',
+            ' exit',
+            'interface GigabitEthernet0/0/7',
+            ' mpls ip',
+            ' exit',
+        ]))
 
 
-            self.assertMultiLineEqual(str(out['PE2']), '\n'.join([
-                'mpls label protocol ldp',
-                'mpls ip',
-                'mpls ldp discovery hello interval 88',
-                'mpls ldp discovery hello holdtime 99',
-                'interface GigabitEthernet0/0/2',
-                ' mpls ip',
-                ' exit',
-                'interface GigabitEthernet0/0/8',
-                ' mpls ip',
-                ' exit',
-            ]))
+        self.assertMultiLineEqual(str(out['PE2']), '\n'.join([
+            'mpls label protocol ldp',
+            'mpls ip',
+            'mpls ldp discovery hello interval 88',
+            'mpls ldp discovery hello holdtime 99',
+            'interface GigabitEthernet0/0/2',
+            ' mpls ip',
+            ' exit',
+            'interface GigabitEthernet0/0/8',
+            ' mpls ip',
+            ' exit',
+        ]))
 
         # Check intf unconfig - intf <GigabitEthernet0/0/0/8> config filter
         out = ldp.build_unconfig(apply=False, attributes='device_attr__*__interface_attr__GigabitEthernet0/0/8')

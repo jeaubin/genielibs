@@ -242,316 +242,315 @@ class RoutePolicy(ABC):
                 def config_assembly(self, need_elseif=False,
                     unconfig=False, indent_count=0, **kwargs):
 
-                        new_configurations = \
-                            CliConfigBuilder(unconfig=unconfig)
+                    new_configurations = \
+                        CliConfigBuilder(unconfig=unconfig)
 
-                        # iosxr: if/elif med eq <match_med_eq>
-                        if attributes.value('match_med_eq'):
-                            self.conditional_keys['match_med_eq'] = \
-                                attributes.format('med eq {match_med_eq}')
+                    # iosxr: if/elif med eq <match_med_eq>
+                    if attributes.value('match_med_eq'):
+                        self.conditional_keys['match_med_eq'] = \
+                            attributes.format('med eq {match_med_eq}')
 
-                        # iosxr: if/elif origin is <match_origin_eq>
-                        if attributes.value('match_origin_eq'):
-                            self.conditional_keys['match_origin_eq'] = \
-                                attributes.format('origin is '
-                                    '{match_origin_eq.value}')
+                    # iosxr: if/elif origin is <match_origin_eq>
+                    if attributes.value('match_origin_eq'):
+                        self.conditional_keys['match_origin_eq'] = \
+                            attributes.format('origin is '
+                                '{match_origin_eq.value}')
 
-                        # iosxr: if/elif nexthop in <match_nexthop_in>
-                        if attributes.value('match_nexthop_in'):
-                            self.conditional_keys['match_nexthop_in'] = \
+                    # iosxr: if/elif nexthop in <match_nexthop_in>
+                    if attributes.value('match_nexthop_in'):
+                        self.conditional_keys['match_nexthop_in'] = \
+                            attributes.format(
+                                'next-hop in {match_nexthop_in}')
+
+                    # iosxr: if/elif nexthop in <match_nexthop_in_v6>
+                    if attributes.value('match_nexthop_in_v6'):
+                        self.conditional_keys['match_nexthop_in_v6'] = \
+                            attributes.format('next-hop in '
+                                '{match_nexthop_in_v6}')
+
+                    # iosxr: if/elif local-preference eq
+                    # <match_local_pref_eq>
+                    if attributes.value('match_local_pref_eq'):
+                        self.conditional_keys['match_local_pref_eq'] = \
+                            attributes.format('local-preference eq '
+                                '{match_local_pref_eq}')
+
+                    # iosxr: if/elif community matches-any
+                    # <match_community_list>
+                    if attributes.value('match_community_list'):
+                        self.conditional_keys['match_community_list'] = \
+                            attributes.format('community matches-any '
+                                '{match_community_list}')
+
+                    # iosxr: if/elif extcommunity
+                    # <match_ext_community_list_type>
+                    # matches-any <match_ext_community_list>
+                    if attributes.value('match_ext_community_list') and \
+                        attributes.value('match_ext_community_list_type'):
+                        self.conditional_keys['match_ext_community_list'] = \
+                            attributes.format('extcommunity '
+                                '{match_ext_community_list_type.value} '
+                                'matches-any {match_ext_community_list}')
+
+                    # iosxr: if/elif as-path in <match_as_path_list>
+                    if attributes.value('match_as_path_list'):
+                        self.conditional_keys['match_as_path_list'] = \
+                            attributes.format('as-path in '
+                                '{match_as_path_list}')
+
+                    # iosxr: if/elif as-path length
+                    # <match_as_path_length_oper> <match_as_path_length>
+                    if attributes.value('match_as_path_length_oper') and \
+                        attributes.value('match_as_path_length'):
+                        self.conditional_keys['match_as_path_length'] = \
+                            attributes.format('as-path length '
+                                '{match_as_path_length_oper.value} '
+                                '{match_as_path_length}')
+
+                    # iosxr: if/elif route-type is <match_level_eq>
+                    if attributes.value('match_level_eq'):
+                        if 'level_1_2' in attributes.value(
+                            'match_level_eq'):
+                            self.conditional_keys['match_level_eq'] = \
                                 attributes.format(
-                                    'next-hop in {match_nexthop_in}')
+                                    'route-type is interarea')
+                        else:
+                            self.conditional_keys['match_level_eq'] = \
+                                attributes.format('route-type is '
+                                    '{match_level_eq.value}')
 
-                        # iosxr: if/elif nexthop in <match_nexthop_in_v6>
-                        if attributes.value('match_nexthop_in_v6'):
-                            self.conditional_keys['match_nexthop_in_v6'] = \
-                                attributes.format('next-hop in '
-                                    '{match_nexthop_in_v6}')
+                    # iosxr: if/elif ospf-area is <area_eq>
+                    if attributes.value('area_eq'):
+                        self.conditional_keys['area_eq'] = \
+                            attributes.format('ospf-area is '
+                                '{area_eq}')
 
-                        # iosxr: if/elif local-preference eq
-                        # <match_local_pref_eq>
-                        if attributes.value('match_local_pref_eq'):
-                            self.conditional_keys['match_local_pref_eq'] = \
-                                attributes.format('local-preference eq '
-                                    '{match_local_pref_eq}')
+                    # iosxr: if/elif destination in <match_prefix_list>
+                    if attributes.value('match_prefix_list'):
+                        self.conditional_keys['match_prefix_list'] = \
+                            attributes.format('destination in '
+                                '{match_prefix_list}')
 
-                        # iosxr: if/elif community matches-any
-                        # <match_community_list>
-                        if attributes.value('match_community_list'):
-                            self.conditional_keys['match_community_list'] = \
-                                attributes.format('community matches-any '
-                                    '{match_community_list}')
+                    # iosxr: if/elif destination in <match_prefix_list_v6>
+                    if attributes.value('match_prefix_list_v6'):
+                        self.conditional_keys['match_prefix_list_v6'] = \
+                            attributes.format('destination in '
+                                '{match_prefix_list_v6}')
 
-                        # iosxr: if/elif extcommunity
-                        # <match_ext_community_list_type>
-                        # matches-any <match_ext_community_list>
-                        if attributes.value('match_ext_community_list') and \
-                            attributes.value('match_ext_community_list_type'):
-                            self.conditional_keys['match_ext_community_list'] = \
-                                attributes.format('extcommunity '
-                                    '{match_ext_community_list_type.value} '
-                                    'matches-any {match_ext_community_list}')
-
-                        # iosxr: if/elif as-path in <match_as_path_list>
-                        if attributes.value('match_as_path_list'):
-                            self.conditional_keys['match_as_path_list'] = \
-                                attributes.format('as-path in '
-                                    '{match_as_path_list}')
-
-                        # iosxr: if/elif as-path length
-                        # <match_as_path_length_oper> <match_as_path_length>
-                        if attributes.value('match_as_path_length_oper') and \
-                            attributes.value('match_as_path_length'):
-                            self.conditional_keys['match_as_path_length'] = \
-                                attributes.format('as-path length '
-                                    '{match_as_path_length_oper.value} '
-                                    '{match_as_path_length}')
-
-                        # iosxr: if/elif route-type is <match_level_eq>
-                        if attributes.value('match_level_eq'):
-                            if 'level_1_2' in attributes.value(
-                                'match_level_eq'):
-                                self.conditional_keys['match_level_eq'] = \
-                                    attributes.format(
-                                        'route-type is interarea')
-                            else:
-                                self.conditional_keys['match_level_eq'] = \
-                                    attributes.format('route-type is '
-                                        '{match_level_eq.value}')
-
-                        # iosxr: if/elif ospf-area is <area_eq>
-                        if attributes.value('area_eq'):
-                            self.conditional_keys['area_eq'] = \
-                                attributes.format('ospf-area is '
-                                    '{area_eq}')
-
-                        # iosxr: if/elif destination in <match_prefix_list>
-                        if attributes.value('match_prefix_list'):
-                            self.conditional_keys['match_prefix_list'] = \
-                                attributes.format('destination in '
-                                    '{match_prefix_list}')
-
-                        # iosxr: if/elif destination in <match_prefix_list_v6>
-                        if attributes.value('match_prefix_list_v6'):
-                            self.conditional_keys['match_prefix_list_v6'] = \
-                                attributes.format('destination in '
-                                    '{match_prefix_list_v6}')
-
-                        # iosxr: if/elif tag in <match_tag_list>
-                        if attributes.value('match_tag_list'):
-                            self.conditional_keys['match_tag_list'] = \
-                                attributes.format('tag in '
-                                    '{match_tag_list}')
+                    # iosxr: if/elif tag in <match_tag_list>
+                    if attributes.value('match_tag_list'):
+                        self.conditional_keys['match_tag_list'] = \
+                            attributes.format('tag in '
+                                '{match_tag_list}')
 
                         ## Here we construct the config line
-                        if self.conditional_keys:
-                            if need_elseif:
-                                conditional_cfg = attributes.format(' elseif',
-                                    force=True)
-                            else:
-                                conditional_cfg = attributes.format('if',
-                                    force=True)
-                            for index, key in enumerate(
-                                sorted(self.conditional_keys.keys())):
-                                conditional_cfg += ' {}'.format(
-                                    self.conditional_keys[key])
-                                if index < (len(self.conditional_keys)-1):
-                                    conditional_cfg += ' and'
-                                else:
-                                    conditional_cfg += ' then'
-
-                            new_configurations.append_line(conditional_cfg)
+                    if self.conditional_keys:
+                        if need_elseif:
+                            conditional_cfg = attributes.format(' elseif',
+                                force=True)
                         else:
-                            # No spaces should preceed the configuration
-                            # if there is no if/else statements
-                            indent_count = 0
+                            conditional_cfg = attributes.format('if',
+                                force=True)
+                        for index, key in enumerate(
+                                sorted(self.conditional_keys.keys())):
+                            conditional_cfg += ' {}'.format(
+                                self.conditional_keys[key])
+                            conditional_cfg += (
+                                ' and' if index < (len(self.conditional_keys) - 1) else ' then'
+                            )
 
-                        # Counting the spaces to preceed the configuration
-                        # as per the if/else state.
-                        spaces = ' ' * indent_count
+                        new_configurations.append_line(conditional_cfg)
+                    else:
+                        # No spaces should preceed the configuration
+                        # if there is no if/else statements
+                        indent_count = 0
 
-                        # iosxr: # <statement_name>
-                        if attributes.value('statement_name'):
-                            new_configurations.append_line(
-                                attributes.format(spaces+'# {statement_name}'))
+                    # Counting the spaces to preceed the configuration
+                    # as per the if/else state.
+                    spaces = ' ' * indent_count
 
-                        # iosxr: # <description>
-                        if attributes.value('description'):
-                            new_configurations.append_line(
-                                attributes.format(spaces+'# {description}'))
+                    # iosxr: # <statement_name>
+                    if attributes.value('statement_name'):
+                        new_configurations.append_line(
+                            attributes.format(spaces+'# {statement_name}'))
 
-                        # iosxr: set origin <set_route_origin>
-                        if attributes.value('set_route_origin'):
-                            new_configurations.append_line(
-                                attributes.format(spaces+'set origin '
-                                    '{set_route_origin}'))
+                    # iosxr: # <description>
+                    if attributes.value('description'):
+                        new_configurations.append_line(
+                            attributes.format(spaces+'# {description}'))
 
-                        # iosxr: set local-preference <set_local_pref>
-                        if attributes.value('set_local_pref'):
+                    # iosxr: set origin <set_route_origin>
+                    if attributes.value('set_route_origin'):
+                        new_configurations.append_line(
+                            attributes.format(spaces+'set origin '
+                                '{set_route_origin}'))
+
+                    # iosxr: set local-preference <set_local_pref>
+                    if attributes.value('set_local_pref'):
+                        new_configurations.append_line(
+                            attributes.format(
+                                spaces+'set local-preference '
+                                '{set_local_pref}'))
+
+                    # iosxr: set next-hop <set_next_hop>
+                    if attributes.value('set_next_hop') or \
+                        attributes.value('set_nexthop'):
+                        new_configurations.append_line(
+                            attributes.format(spaces+'set next-hop '
+                                '{set_next_hop}'))
+
+                    # iosxr: set next-hop <set_next_hop_v6>
+                    if attributes.value('set_next_hop_v6'):
+                        new_configurations.append_line(
+                            attributes.format(spaces+'set next-hop '
+                                '{set_next_hop_v6}'))
+
+                    # iosxr: set next-hop self
+                    if attributes.value('set_next_hop_self'):
+                        new_configurations.append_line(
+                            attributes.format(spaces+'set next-hop self'))
+
+                    # iosxr: set med <set_med>
+                    if attributes.value('set_med'):
+                        new_configurations.append_line(
+                            attributes.format(spaces+'set med {set_med}'))
+
+                    # iosxr: prepend as-path <set_as_path_prepend>
+                    # <set_as_path_prepend_repeat_n>
+                    if attributes.value('set_as_path_prepend') and \
+                        attributes.value('set_as_path_prepend_repeat_n'):
+                        new_configurations.append_line(
+                            attributes.format(spaces+'prepend as-path '
+                                '{set_as_path_prepend} '
+                                '{set_as_path_prepend_repeat_n}'))
+
+                    # iosxr: set community (<set_community>, no-export,
+                    # no-advertise) additive
+                    if attributes.value('set_community'):
+                        cfg = attributes.format(spaces+'set community '
+                            '({set_community}', force=True)
+                        v1 = attributes.value('set_community_no_export')
+                        if v1 is not None:
+                            cfg += ' ,no-export'
+                        v2 = attributes.value('set_community_no_advertise')
+                        if v2 is not None:
+                            cfg += ' ,no-advertise'
+                        cfg += ')'
+                        v3 = attributes.value('set_community_additive')
+                        if v3 is not None:
+                            cfg += ' additive'
+
+                        new_configurations.append_line(cfg)
+
+                    # iosxr: delete community in <set_community_delete>
+                    if attributes.value('set_community_delete'):
+                        new_configurations.append_line(
+                            attributes.format(spaces+'delete community in '
+                                '{set_community_delete}'))
+
+                    # iosxr: set extcommunity rt (<set_ext_community_rt>)
+                    # [additive]
+                    if attributes.value('set_ext_community_rt'):
+                        if attributes.value(
+                            'set_ext_community_rt_additive'):
                             new_configurations.append_line(
                                 attributes.format(
-                                    spaces+'set local-preference '
-                                    '{set_local_pref}'))
-
-                        # iosxr: set next-hop <set_next_hop>
-                        if attributes.value('set_next_hop') or \
-                            attributes.value('set_nexthop'):
+                                    spaces+'set extcommunity rt '
+                                    '({set_ext_community_rt}) additive'))
+                        else:
                             new_configurations.append_line(
-                                attributes.format(spaces+'set next-hop '
-                                    '{set_next_hop}'))
+                                attributes.format(
+                                    spaces+'set extcommunity rt '
+                                    '({set_ext_community_rt})'))
 
-                        # iosxr: set next-hop <set_next_hop_v6>
-                        if attributes.value('set_next_hop_v6'):
+                    # iosxr: set extcommunity soo (<set_ext_community_soo>)
+                    # [additive]
+                    if attributes.value('set_ext_community_soo'):
+                        if attributes.value(
+                            'set_ext_community_soo_additive'):
                             new_configurations.append_line(
-                                attributes.format(spaces+'set next-hop '
-                                    '{set_next_hop_v6}'))
-
-                        # iosxr: set next-hop self
-                        if attributes.value('set_next_hop_self'):
+                                attributes.format(
+                                    spaces+'set extcommunity soo '
+                                    '({set_ext_community_soo}) additive'))
+                        else:
                             new_configurations.append_line(
-                                attributes.format(spaces+'set next-hop self'))
+                                attributes.format(
+                                    spaces+'set extcommunity soo '
+                                    '({set_ext_community_soo})'))
 
-                        # iosxr: set med <set_med>
-                        if attributes.value('set_med'):
+                    # iosxr: set extcommunity vpn (<set_ext_community_vpn>)
+                    # [additive]
+                    if attributes.value('set_ext_community_vpn'):
+                        if attributes.value(
+                            'set_ext_community_vpn_additive'):
                             new_configurations.append_line(
-                                attributes.format(spaces+'set med {set_med}'))
-
-                        # iosxr: prepend as-path <set_as_path_prepend>
-                        # <set_as_path_prepend_repeat_n>
-                        if attributes.value('set_as_path_prepend') and \
-                            attributes.value('set_as_path_prepend_repeat_n'):
+                                attributes.format(
+                                    spaces+'set extcommunity vpn '
+                                    '({set_ext_community_vpn}) additive'))
+                        else:
                             new_configurations.append_line(
-                                attributes.format(spaces+'prepend as-path '
-                                    '{set_as_path_prepend} '
-                                    '{set_as_path_prepend_repeat_n}'))
+                                attributes.format(
+                                    spaces+'set extcommunity vpn '
+                                    '({set_ext_community_vpn})'))
 
-                        # iosxr: set community (<set_community>, no-export,
-                        # no-advertise) additive
-                        if attributes.value('set_community'):
-                            cfg = attributes.format(spaces+'set community '
-                                '({set_community}', force=True)
-                            v1 = attributes.value('set_community_no_export')
-                            if v1 is not None:
-                                cfg += ' ,no-export'
-                            v2 = attributes.value('set_community_no_advertise')
-                            if v2 is not None:
-                                cfg += ' ,no-advertise'
-                            cfg += ')'
-                            v3 = attributes.value('set_community_additive')
-                            if v3 is not None:
-                                cfg += ' additive'
+                    # iosxr: delete extcommunity
+                    # <set_ext_community_delete_type>
+                    # <set_ext_community_delete>
+                    if attributes.value('set_community_delete') and \
+                        attributes.value('set_ext_community_delete_type'):
+                        new_configurations.append_line(
+                            attributes.format(spaces+'delete extcommunity '
+                                '{set_ext_community_delete_type.value} '
+                                '{set_community_delete}'))
 
-                            new_configurations.append_line(cfg)
+                    # iosxr: set level <set_level>
+                    if attributes.value('set_level'):
+                        new_configurations.append_line(
+                            attributes.format(spaces+'set level '
+                                '{set_level}'))
 
-                        # iosxr: delete community in <set_community_delete>
-                        if attributes.value('set_community_delete'):
-                            new_configurations.append_line(
-                                attributes.format(spaces+'delete community in '
-                                    '{set_community_delete}'))
+                    # iosxr: set metric-type <set_metric_type>
+                    if attributes.value('set_metric_type'):
+                        new_configurations.append_line(
+                            attributes.format(spaces+'set metric-type '
+                                '{set_metric_type}'))
 
-                        # iosxr: set extcommunity rt (<set_ext_community_rt>)
-                        # [additive]
-                        if attributes.value('set_ext_community_rt'):
-                            if attributes.value(
-                                'set_ext_community_rt_additive'):
-                                new_configurations.append_line(
-                                    attributes.format(
-                                        spaces+'set extcommunity rt '
-                                        '({set_ext_community_rt}) additive'))
-                            else:
-                                new_configurations.append_line(
-                                    attributes.format(
-                                        spaces+'set extcommunity rt '
-                                        '({set_ext_community_rt})'))
+                    # iosxr: set isis-metric <set_metric>
+                    if attributes.value('set_metric'):
+                        new_configurations.append_line(
+                            attributes.format(spaces+'set isis-metric '
+                                '{set_metric}'))
 
-                        # iosxr: set extcommunity soo (<set_ext_community_soo>)
-                        # [additive]
-                        if attributes.value('set_ext_community_soo'):
-                            if attributes.value(
-                                'set_ext_community_soo_additive'):
-                                new_configurations.append_line(
-                                    attributes.format(
-                                        spaces+'set extcommunity soo '
-                                        '({set_ext_community_soo}) additive'))
-                            else:
-                                new_configurations.append_line(
-                                    attributes.format(
-                                        spaces+'set extcommunity soo '
-                                        '({set_ext_community_soo})'))
+                    # iosxr: set metric-type <set_ospf_metric_type>
+                    if attributes.value('set_ospf_metric_type'):
+                        new_configurations.append_line(
+                            attributes.format(spaces+'set metric-type '
+                                '{set_ospf_metric_type}'))
 
-                        # iosxr: set extcommunity vpn (<set_ext_community_vpn>)
-                        # [additive]
-                        if attributes.value('set_ext_community_vpn'):
-                            if attributes.value(
-                                'set_ext_community_vpn_additive'):
-                                new_configurations.append_line(
-                                    attributes.format(
-                                        spaces+'set extcommunity vpn '
-                                        '({set_ext_community_vpn}) additive'))
-                            else:
-                                new_configurations.append_line(
-                                    attributes.format(
-                                        spaces+'set extcommunity vpn '
-                                        '({set_ext_community_vpn})'))
+                    # iosxr: set ospf-metric <set_ospf_metric>
+                    if attributes.value('set_ospf_metric'):
+                        new_configurations.append_line(
+                            attributes.format(spaces+'set ospf-metric '
+                                '{set_ospf_metric}'))
 
-                        # iosxr: delete extcommunity
-                        # <set_ext_community_delete_type>
-                        # <set_ext_community_delete>
-                        if attributes.value('set_community_delete') and \
-                            attributes.value('set_ext_community_delete_type'):
-                            new_configurations.append_line(
-                                attributes.format(spaces+'delete extcommunity '
-                                    '{set_ext_community_delete_type.value} '
-                                    '{set_community_delete}'))
+                    # iosxr: set tag <set_tag>
+                    if attributes.value('set_tag'):
+                        new_configurations.append_line(
+                            attributes.format(spaces+'set tag '
+                                '{set_tag}'))
 
-                        # iosxr: set level <set_level>
-                        if attributes.value('set_level'):
-                            new_configurations.append_line(
-                                attributes.format(spaces+'set level '
-                                    '{set_level}'))
+                    # iosxr: set weight <set_weight>
+                    if attributes.value('set_weight'):
+                        new_configurations.append_line(
+                            attributes.format(spaces+'set weight '
+                                '{set_weight}'))
 
-                        # iosxr: set metric-type <set_metric_type>
-                        if attributes.value('set_metric_type'):
-                            new_configurations.append_line(
-                                attributes.format(spaces+'set metric-type '
-                                    '{set_metric_type}'))
+                    # iosxr: pass|done|drop
+                    if attributes.value('actions'):
+                        new_configurations.append_line(
+                            attributes.format(spaces+'{actions.value}'))
 
-                        # iosxr: set isis-metric <set_metric>
-                        if attributes.value('set_metric'):
-                            new_configurations.append_line(
-                                attributes.format(spaces+'set isis-metric '
-                                    '{set_metric}'))
-
-                        # iosxr: set metric-type <set_ospf_metric_type>
-                        if attributes.value('set_ospf_metric_type'):
-                            new_configurations.append_line(
-                                attributes.format(spaces+'set metric-type '
-                                    '{set_ospf_metric_type}'))
-
-                        # iosxr: set ospf-metric <set_ospf_metric>
-                        if attributes.value('set_ospf_metric'):
-                            new_configurations.append_line(
-                                attributes.format(spaces+'set ospf-metric '
-                                    '{set_ospf_metric}'))
-
-                        # iosxr: set tag <set_tag>
-                        if attributes.value('set_tag'):
-                            new_configurations.append_line(
-                                attributes.format(spaces+'set tag '
-                                    '{set_tag}'))
-
-                        # iosxr: set weight <set_weight>
-                        if attributes.value('set_weight'):
-                            new_configurations.append_line(
-                                attributes.format(spaces+'set weight '
-                                    '{set_weight}'))
-
-                        # iosxr: pass|done|drop
-                        if attributes.value('actions'):
-                            new_configurations.append_line(
-                                attributes.format(spaces+'{actions.value}'))
-
-                        return str(new_configurations)
+                    return str(new_configurations)
 
                 if need_elseif:
                     configurations.append_block(config_assembly(self,

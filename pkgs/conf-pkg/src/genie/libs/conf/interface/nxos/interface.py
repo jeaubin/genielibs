@@ -886,11 +886,10 @@ class SubInterface(VirtualInterface, genie.libs.conf.interface.SubInterface):
         else:
             first_dot1q = None
 
-        if encapsulation and encapsulation == 'dot1q':
-            if first_dot1q:
-                cmd = 'encapsulation {} {}'.format(encapsulation, first_dot1q)
-                uncmd = 'no encapsulation {}'.format(encapsulation)
-                configurations.append_line(cmd, unconfig_cmd=uncmd)
+        if encapsulation and encapsulation == 'dot1q' and first_dot1q:
+            cmd = 'encapsulation {} {}'.format(encapsulation, first_dot1q)
+            uncmd = 'no encapsulation {}'.format(encapsulation)
+            configurations.append_line(cmd, unconfig_cmd=uncmd)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

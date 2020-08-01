@@ -734,18 +734,18 @@ def copy_to_device(section, steps, device, origin, destination, protocol,
             else:
                 step.passed("Verified filesize of file '{}' to be "
                             "{} bytes".format(file, file_size))
-        
+
         # Check if file with same name and size exists on device
         dest_file_path = os.path.join(destination_act, os.path.basename(file))
         with steps.start("Check if file '{}' exists on device {}".\
-                        format(dest_file_path, device.name)) as step:
+                                format(dest_file_path, device.name)) as step:
 
             # Check if file exists
             try:
                 exist = device.api.verify_file_exists(file=dest_file_path,
                                                       size=file_size,
                                                       dir_output=dir_before)
-                if (not exist) or (exist and overwrite):
+                if not exist or overwrite:
                     # Update list of files to copy
                     file_copy_info = {
                         file: {
@@ -768,14 +768,14 @@ def copy_to_device(section, steps, device, origin, destination, protocol,
             # Check if file with same name and size exists on device
             dest_file_path = os.path.join(destination_act, os.path.basename(file))
             with steps.start("Check if file '{}' exists on device ".\
-                            format(dest_file_path, device.name)) as step:
+                                        format(dest_file_path, device.name)) as step:
 
                 # Check if file exists
                 try:
                     exist = device.api.verify_file_exists(file=dest_file_path,
                                                         size=file_size,
                                                         dir_output=dir_before)
-                    if (not exist) or (exist and overwrite):
+                    if not exist or overwrite:
                         # Update list of files to copy
                         file_copy_info = {
                             file: {

@@ -199,10 +199,6 @@ class RouteTarget(object):
                     ip = IPv4Address(w1 << 16 | w2)
                     idx = w3
                     self.fields = [type_, ip, idx]
-                elif type_ is RouteTargetType.ASN4_index:
-                    asn = w1 << 16 | w2
-                    idx = w3
-                    self.fields = [type_, asn, idx]
                 else:
                     raise TypeError
                 return

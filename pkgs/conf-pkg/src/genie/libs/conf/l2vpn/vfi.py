@@ -249,10 +249,9 @@ class Vfi(ConfigurableBase):
                     yield nbr
 
     def create_pseudowire_neighbor(self, **kwargs):
-        pwnbr = PseudowireNeighbor(container=self,
+        return PseudowireNeighbor(container=self,
                                    device=self.device,
                                    **kwargs)
-        return pwnbr
 
     @property
     def segments(self):

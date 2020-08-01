@@ -185,9 +185,7 @@ class ESI(object):
     @property
     def value(self):
         '''`int`: ESI value as an integer (w/o type)'''
-        return sum([
-            v << (8 * shift)
-            for shift, v in enumerate(reversed(self.bytes))])
+        return sum(v << (8 * shift) for shift, v in enumerate(reversed(self.bytes)))
 
     @value.setter
     def value(self, value):

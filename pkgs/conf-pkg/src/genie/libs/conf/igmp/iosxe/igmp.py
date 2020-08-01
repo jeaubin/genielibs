@@ -66,13 +66,15 @@ class Igmp(ABC):
                     configurations.append_line(attributes.format(cfg_str, force=True))
 
                 # ip igmp [vrf <vrf>] ssm-map enable
-                if hasattr(attributes.value('ssm'), 'data'):
-                    if attributes.value('ssm').data:
-                        cfg_str = 'ip igmp ssm-map enable' \
-                            if self.vrf_id == 'default' else \
-                                'ip igmp vrf {} ssm-map enable'.format(self.vrf_id)
+                if (
+                    hasattr(attributes.value('ssm'), 'data')
+                    and attributes.value('ssm').data
+                ):
+                    cfg_str = 'ip igmp ssm-map enable' \
+                        if self.vrf_id == 'default' else \
+                            'ip igmp vrf {} ssm-map enable'.format(self.vrf_id)
 
-                        configurations.append_line(attributes.format(cfg_str))
+                    configurations.append_line(attributes.format(cfg_str))
 
                 # Ssm Attributes under vrf level config
                 for ssm, attributes2 in attributes.sequence_values('ssm', sort=True):

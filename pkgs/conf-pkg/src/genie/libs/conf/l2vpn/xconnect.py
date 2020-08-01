@@ -325,9 +325,7 @@ class Xconnect(DeviceFeature):
                 if parent_interface:
                     # recurse
                     link_interfaces = self.link_interfaces_from_segment(parent_interface)
-        elif isinstance(segment, Pseudowire):
-            pass
-        else:
+        elif not isinstance(segment, Pseudowire):
             raise ValueError(segment)
         return link_interfaces
 
@@ -516,10 +514,9 @@ class Xconnect(DeviceFeature):
                     yield nbr
 
         def create_pseudowire_neighbor(self, **kwargs):
-            pwnbr = PseudowireNeighbor(container=self.parent,
+            return PseudowireNeighbor(container=self.parent,
                                        device=self.device,
                                        **kwargs)
-            return pwnbr
 
         @property
         def segments(self):

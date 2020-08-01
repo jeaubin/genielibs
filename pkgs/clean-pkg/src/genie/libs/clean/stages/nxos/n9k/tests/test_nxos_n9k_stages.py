@@ -84,8 +84,7 @@ class PositiveStages(unittest.TestCase):
     @unittest.mock.patch('os.path.join', Mock(return_value='/auto/path/images/nxos.9.3.1_N95.bin'))
     @unittest.mock.patch('shutil.copyfile', Mock(return_value=True))
     def test_stage_copy_to_linux(self):
-        self.section.history = {}
-        self.section.history['copy_to_linux'] = Mock()
+        self.section.history = {'copy_to_linux': Mock()}
         self.section.history['copy_to_linux'].parameters = {}
 
         self.device.api.modify_filename = Mock(return_value='nxos.9.3.1_N95.bin')
@@ -100,8 +99,7 @@ class PositiveStages(unittest.TestCase):
 
 
     def test_stage_copy_to_device(self):
-        self.section.history = {}
-        self.section.history['copy_to_device'] = Mock()
+        self.section.history = {'copy_to_device': Mock()}
         self.section.history['copy_to_device'].parameters = {}
 
         self.device.execute = Mock(side_effect=pos_execute)
@@ -223,8 +221,7 @@ class NegativeStages(unittest.TestCase):
 
 
     def test_stage_copy_to_device(self):
-        self.section.history = {}
-        self.section.history['copy_to_device'] = Mock()
+        self.section.history = {'copy_to_device': Mock()}
         self.section.history['copy_to_device'].parameters = {}
 
         self.device.execute = Mock(side_effect=neg_execute)

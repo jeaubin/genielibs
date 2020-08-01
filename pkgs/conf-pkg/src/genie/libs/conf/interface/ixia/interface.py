@@ -109,11 +109,7 @@ class Interface(genie.libs.conf.interface.hltapi.Interface):
                     raise UnknownInterfaceTypeError
             else:
                 # Based on an Ixia physical port.
-                if d_parsed.subintf:
-                    factory_cls = SubInterface
-                else:
-                    factory_cls = PhysicalInterface
-
+                factory_cls = SubInterface if d_parsed.subintf else PhysicalInterface
         if factory_cls is not cls:
             self = factory_cls.__new__(factory_cls, *args, **kwargs)
         elif super().__new__ is object.__new__:

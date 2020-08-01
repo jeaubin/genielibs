@@ -159,129 +159,125 @@ class test_ldp(unittest.TestCase):
         ldp.signalling_dscp = 16
 
         out = ldp.build_config(apply=False)
-        if 1:
-            self.assertCountEqual(out.keys(), ['PE1', 'PE2'])
-            self.assertMultiLineEqual(str(out['PE1']), '\n'.join([
-                'mpls ldp',
-                ' capabilities cisco ios-xr disable',
-                ' default-vrf implicit-ipv4 disable',
-                ' discovery',
-                '  ds-tlv disable',
-                '  hello holdtime 100',
-                '  hello interval 200',
-                '  instance-tlv disable',
-                '  quick-start disable',
-                '  targeted-hello holdtime 10',
-                '  targeted-hello interval 15',
-                '  exit',
-                ' entropy-label',
-                ' graceful-restart',
-                ' graceful-restart forwarding-state-holdtime 60',
-                ' graceful-restart reconnect-timeout 60',
-                ' igp sync delay on-proc-restart 300',
-                ' igp sync delay on-session-up 200',
-                ' nsr',
-                ' session backoff 20 150',
-                ' session holdtime 444',
-                ' session protection for acl1 duration 222',
-                ' signalling dscp 16',
-                ' log',
-                '  graceful-restart',
-                '  hello-adjacency',
-                '  neighbor',
-                '  nsr',
-                '  session-protection',
-                '  exit',
-                ' ltrace-buffer multiplier 3',
-                ' graceful-restart helper-peer maintain-on-local-reset for acl3',
-                ' address-family ipv4',
-                '  exit',
-                ' interface GigabitEthernet0/0/0/1',
-                '  address-family ipv4',
-                '   exit',
-                '  exit',
-                ' neighbor',
-                '  dual-stack tlv-compliance',
-                '  dual-stack transport-connection max-wait 30',
-                '  dual-stack transport-connection prefer ipv4',
-                '  password clear password1',
-                '  exit',
-                ' exit', 
-            ]))
+        self.assertCountEqual(out.keys(), ['PE1', 'PE2'])
+        self.assertMultiLineEqual(str(out['PE1']), '\n'.join([
+            'mpls ldp',
+            ' capabilities cisco ios-xr disable',
+            ' default-vrf implicit-ipv4 disable',
+            ' discovery',
+            '  ds-tlv disable',
+            '  hello holdtime 100',
+            '  hello interval 200',
+            '  instance-tlv disable',
+            '  quick-start disable',
+            '  targeted-hello holdtime 10',
+            '  targeted-hello interval 15',
+            '  exit',
+            ' entropy-label',
+            ' graceful-restart',
+            ' graceful-restart forwarding-state-holdtime 60',
+            ' graceful-restart reconnect-timeout 60',
+            ' igp sync delay on-proc-restart 300',
+            ' igp sync delay on-session-up 200',
+            ' nsr',
+            ' session backoff 20 150',
+            ' session holdtime 444',
+            ' session protection for acl1 duration 222',
+            ' signalling dscp 16',
+            ' log',
+            '  graceful-restart',
+            '  hello-adjacency',
+            '  neighbor',
+            '  nsr',
+            '  session-protection',
+            '  exit',
+            ' ltrace-buffer multiplier 3',
+            ' graceful-restart helper-peer maintain-on-local-reset for acl3',
+            ' address-family ipv4',
+            '  exit',
+            ' interface GigabitEthernet0/0/0/1',
+            '  address-family ipv4',
+            '   exit',
+            '  exit',
+            ' neighbor',
+            '  dual-stack tlv-compliance',
+            '  dual-stack transport-connection max-wait 30',
+            '  dual-stack transport-connection prefer ipv4',
+            '  password clear password1',
+            '  exit',
+            ' exit', 
+        ]))
 
-            self.assertMultiLineEqual(str(out['PE2']), '\n'.join([
-                'mpls ldp',
-                ' capabilities cisco ios-xr disable',
-                ' default-vrf implicit-ipv4 disable',
-                ' discovery',
-                '  ds-tlv disable',
-                '  hello holdtime 100',
-                '  hello interval 200',
-                '  instance-tlv disable',
-                '  quick-start disable',
-                '  targeted-hello holdtime 10',
-                '  targeted-hello interval 15',
-                '  exit',
-                ' entropy-label',
-                ' graceful-restart',
-                ' graceful-restart forwarding-state-holdtime 60',
-                ' graceful-restart reconnect-timeout 60',
-                ' igp sync delay on-proc-restart 300',
-                ' igp sync delay on-session-up 200',
-                ' nsr',
-                ' session backoff 10 250',
-                ' session holdtime 333',
-                ' session protection for acl1 duration 333',
-                ' signalling dscp 16',
-                ' log',
-                '  graceful-restart',
-                '  hello-adjacency',
-                '  neighbor',
-                '  nsr',
-                '  session-protection',
-                '  exit',
-                ' ltrace-buffer multiplier 3',
-                ' graceful-restart helper-peer maintain-on-local-reset for acl3',
-                ' address-family ipv4',
-                '  exit',
-                ' interface GigabitEthernet0/0/0/2',
-                '  address-family ipv4',
-                '   exit',
-                '  exit',
-                ' neighbor',
-                '  dual-stack tlv-compliance',
-                '  dual-stack transport-connection max-wait 30',
-                '  dual-stack transport-connection prefer ipv4',
-                '  password encrypted 060506324F41',
-                '  exit',
-                ' exit', 
-            ]))
+        self.assertMultiLineEqual(str(out['PE2']), '\n'.join([
+            'mpls ldp',
+            ' capabilities cisco ios-xr disable',
+            ' default-vrf implicit-ipv4 disable',
+            ' discovery',
+            '  ds-tlv disable',
+            '  hello holdtime 100',
+            '  hello interval 200',
+            '  instance-tlv disable',
+            '  quick-start disable',
+            '  targeted-hello holdtime 10',
+            '  targeted-hello interval 15',
+            '  exit',
+            ' entropy-label',
+            ' graceful-restart',
+            ' graceful-restart forwarding-state-holdtime 60',
+            ' graceful-restart reconnect-timeout 60',
+            ' igp sync delay on-proc-restart 300',
+            ' igp sync delay on-session-up 200',
+            ' nsr',
+            ' session backoff 10 250',
+            ' session holdtime 333',
+            ' session protection for acl1 duration 333',
+            ' signalling dscp 16',
+            ' log',
+            '  graceful-restart',
+            '  hello-adjacency',
+            '  neighbor',
+            '  nsr',
+            '  session-protection',
+            '  exit',
+            ' ltrace-buffer multiplier 3',
+            ' graceful-restart helper-peer maintain-on-local-reset for acl3',
+            ' address-family ipv4',
+            '  exit',
+            ' interface GigabitEthernet0/0/0/2',
+            '  address-family ipv4',
+            '   exit',
+            '  exit',
+            ' neighbor',
+            '  dual-stack tlv-compliance',
+            '  dual-stack transport-connection max-wait 30',
+            '  dual-stack transport-connection prefer ipv4',
+            '  password encrypted 060506324F41',
+            '  exit',
+            ' exit', 
+        ]))
 
-        if 1:
-            # set the per-attr variables that are inherited by VRF
-            ldp.device_attr['PE1'].vrf_attr['default'].router_id = '1.1.1.1'
-            ldp.device_attr['PE2'].vrf_attr['default'].router_id = '2.2.2.2'
-            ldp.device_attr['PE1'].vrf_attr['default'].session_dod_acl = acl11
-            ldp.device_attr['PE2'].vrf_attr['default'].session_dod_acl = acl22
+        # set the per-attr variables that are inherited by VRF
+        ldp.device_attr['PE1'].vrf_attr['default'].router_id = '1.1.1.1'
+        ldp.device_attr['PE2'].vrf_attr['default'].router_id = '2.2.2.2'
+        ldp.device_attr['PE1'].vrf_attr['default'].session_dod_acl = acl11
+        ldp.device_attr['PE2'].vrf_attr['default'].session_dod_acl = acl22
 
-            out = ldp.build_config(apply=False)
-            self.assertRegex(str(out['PE1']), 'router-id 1.1.1.1')
-            self.assertRegex(str(out['PE1']), 'session downstream-on-demand with acl11')
+        out = ldp.build_config(apply=False)
+        self.assertRegex(str(out['PE1']), 'router-id 1.1.1.1')
+        self.assertRegex(str(out['PE1']), 'session downstream-on-demand with acl11')
 
-            self.assertRegex(str(out['PE2']), 'router-id 2.2.2.2')
-            self.assertRegex(str(out['PE2']), 'session downstream-on-demand with acl22')
+        self.assertRegex(str(out['PE2']), 'router-id 2.2.2.2')
+        self.assertRegex(str(out['PE2']), 'session downstream-on-demand with acl22')
 
         # Check unconfig - <nsr> config filter
         out = ldp.build_unconfig(apply=False, attributes='device_attr__*__nsr')
-        if 1:
-            self.assertRegex(str(out['PE1']), 'no nsr')
-            self.assertRegex(str(out['PE2']), 'no nsr')
+        self.assertRegex(str(out['PE1']), 'no nsr')
+        self.assertRegex(str(out['PE2']), 'no nsr')
 
         # Check unconfig - <gr> config filter=
         out = ldp.build_unconfig(apply=False, attributes='device_attr__*__gr')
-        if 1:
-            self.assertRegex(str(out['PE1']), 'no graceful-restart')
-            self.assertRegex(str(out['PE2']), 'no graceful-restart')
+        self.assertRegex(str(out['PE1']), 'no graceful-restart')
+        self.assertRegex(str(out['PE2']), 'no graceful-restart')
 
     def test_2_per_vrf(self):
 
@@ -486,47 +482,43 @@ class test_ldp(unittest.TestCase):
 
         # ==Test per interface config===
         out = ldp.build_config(apply=False)
-        if 1:
-            self.assertRegex(str(out['PE1']), '(?s)interface GigabitEthernet0/0/0/1.*igp sync delay on-session-up 250')
-            self.assertRegex(str(out['PE1']), '(?s)interface GigabitEthernet0/0/0/1.*discovery hello dual-stack-tlv ipv4')
-            self.assertRegex(str(out['PE1']), '(?s)interface GigabitEthernet0/0/0/1.*discovery hello holdtime 50')
-            self.assertRegex(str(out['PE1']), '(?s)interface GigabitEthernet0/0/0/1.*discovery hello interval 60')
-            self.assertRegex(str(out['PE1']), '(?s)interface GigabitEthernet0/0/0/1.*discovery quick-start disable')
-            self.assertRegex(str(out['PE2']), '(?s)interface GigabitEthernet0/0/0/8.*igp sync delay on-session-up disable')
-            self.assertRegex(str(out['PE2']), '(?s)interface GigabitEthernet0/0/0/8.*discovery hello dual-stack-tlv ipv6')
-            # hello interval and hello holdtime are NOT inherited
-            self.assertNotRegex(str(out['PE2']), '(?s)interface GigabitEthernet0/0/0/2.*discovery hello holdtime 99')
-            self.assertNotRegex(str(out['PE2']), '(?s)interface GigabitEthernet0/0/0/2.*discovery hello interval 88')
+        self.assertRegex(str(out['PE1']), '(?s)interface GigabitEthernet0/0/0/1.*igp sync delay on-session-up 250')
+        self.assertRegex(str(out['PE1']), '(?s)interface GigabitEthernet0/0/0/1.*discovery hello dual-stack-tlv ipv4')
+        self.assertRegex(str(out['PE1']), '(?s)interface GigabitEthernet0/0/0/1.*discovery hello holdtime 50')
+        self.assertRegex(str(out['PE1']), '(?s)interface GigabitEthernet0/0/0/1.*discovery hello interval 60')
+        self.assertRegex(str(out['PE1']), '(?s)interface GigabitEthernet0/0/0/1.*discovery quick-start disable')
+        self.assertRegex(str(out['PE2']), '(?s)interface GigabitEthernet0/0/0/8.*igp sync delay on-session-up disable')
+        self.assertRegex(str(out['PE2']), '(?s)interface GigabitEthernet0/0/0/8.*discovery hello dual-stack-tlv ipv6')
+        # hello interval and hello holdtime are NOT inherited
+        self.assertNotRegex(str(out['PE2']), '(?s)interface GigabitEthernet0/0/0/2.*discovery hello holdtime 99')
+        self.assertNotRegex(str(out['PE2']), '(?s)interface GigabitEthernet0/0/0/2.*discovery hello interval 88')
 
         # Check intf config - intf <GigabitEthernet0/0/0/8> config filter
         # (needs vrf as it is under default VRF)
         out = ldp.build_config(apply=False, attributes='device_attr__*__vrf_attr__*__interface_attr__GigabitEthernet0/0/0/8')
-        if 1:
-            self.assertNotRegex(str(out['PE1']), '(?s)interface GigabitEthernet0/0/0/1.*igp sync delay on-session-up 250')
-            self.assertNotRegex(str(out['PE1']), '(?s)interface GigabitEthernet0/0/0/1.*discovery hello dual-stack-tlv ipv4')
-            self.assertNotRegex(str(out['PE1']), '(?s)interface GigabitEthernet0/0/0/1.*discovery hello holdtime 50')
-            self.assertNotRegex(str(out['PE1']), '(?s)interface GigabitEthernet0/0/0/1.*discovery hello interval 60')
-            self.assertNotRegex(str(out['PE1']), '(?s)interface GigabitEthernet0/0/0/1.*discovery quick-start disable')
-            self.assertRegex(str(out['PE2']), '(?s)interface GigabitEthernet0/0/0/8.*igp sync delay on-session-up disable')
-            self.assertRegex(str(out['PE2']), '(?s)interface GigabitEthernet0/0/0/8.*discovery hello dual-stack-tlv ipv6')
-            self.assertNotRegex(str(out['PE2']), '(?s)interface GigabitEthernet0/0/0/2.*discovery hello holdtime 99')
-            self.assertNotRegex(str(out['PE2']), '(?s)interface GigabitEthernet0/0/0/2.*discovery hello interval 88')
+        self.assertNotRegex(str(out['PE1']), '(?s)interface GigabitEthernet0/0/0/1.*igp sync delay on-session-up 250')
+        self.assertNotRegex(str(out['PE1']), '(?s)interface GigabitEthernet0/0/0/1.*discovery hello dual-stack-tlv ipv4')
+        self.assertNotRegex(str(out['PE1']), '(?s)interface GigabitEthernet0/0/0/1.*discovery hello holdtime 50')
+        self.assertNotRegex(str(out['PE1']), '(?s)interface GigabitEthernet0/0/0/1.*discovery hello interval 60')
+        self.assertNotRegex(str(out['PE1']), '(?s)interface GigabitEthernet0/0/0/1.*discovery quick-start disable')
+        self.assertRegex(str(out['PE2']), '(?s)interface GigabitEthernet0/0/0/8.*igp sync delay on-session-up disable')
+        self.assertRegex(str(out['PE2']), '(?s)interface GigabitEthernet0/0/0/8.*discovery hello dual-stack-tlv ipv6')
+        self.assertNotRegex(str(out['PE2']), '(?s)interface GigabitEthernet0/0/0/2.*discovery hello holdtime 99')
+        self.assertNotRegex(str(out['PE2']), '(?s)interface GigabitEthernet0/0/0/2.*discovery hello interval 88')
 
         # Check intf unconfig - intf <GigabitEthernet0/0/0/8> config filter
         # (needs vrf as it is under default VRF)
         out = ldp.build_unconfig(apply=False, attributes='device_attr__*__vrf_attr__*__interface_attr__GigabitEthernet0/0/0/8')
-        if 1:
-            self.assertRegex(str(out['PE2']), 'no interface GigabitEthernet0/0/0/8')
-            self.assertNotRegex(str(out['PE1']), 'interface GigabitEthernet0/0/0/1')
-            self.assertNotRegex(str(out['PE2']), 'interface GigabitEthernet0/0/0/2')
+        self.assertRegex(str(out['PE2']), 'no interface GigabitEthernet0/0/0/8')
+        self.assertNotRegex(str(out['PE1']), 'interface GigabitEthernet0/0/0/1')
+        self.assertNotRegex(str(out['PE2']), 'interface GigabitEthernet0/0/0/2')
 
         # Check intf unconfig - intf <GigabitEthernet0/0/0/8> attr <disc_hello_dualstack_tlv> config filter
         # (needs vrf as it is under default VRF)
         out = ldp.build_unconfig(apply=False, attributes='device_attr__*__vrf_attr__*__interface_attr__GigabitEthernet0/0/0/8__disc_hello_dualstack_tlv')
-        if 1:
-            self.assertRegex(str(out['PE2']), '(?s)interface GigabitEthernet0/0/0/8.*no discovery hello dual-stack-tlv')
-            self.assertNotRegex(str(out['PE1']), 'interface GigabitEthernet0/0/0/1')
-            self.assertNotRegex(str(out['PE2']), 'interface GigabitEthernet0/0/0/2')
+        self.assertRegex(str(out['PE2']), '(?s)interface GigabitEthernet0/0/0/8.*no discovery hello dual-stack-tlv')
+        self.assertNotRegex(str(out['PE1']), 'interface GigabitEthernet0/0/0/1')
+        self.assertNotRegex(str(out['PE2']), 'interface GigabitEthernet0/0/0/2')
 
     def test_4_per_af(self):
 
@@ -680,9 +672,8 @@ class test_ldp(unittest.TestCase):
 
         # ==Test vrf per interface per address-family config==
         out = ldp.build_config(apply=False)
-        if 1:
-            self.assertRegex(str(out['PE1']), '(?s)vrf1.*interface GigabitEthernet0/0/0/1.*address-family ipv4.*discovery transport-address 2.3.4.5')
-            self.assertRegex(str(out['PE2']), '(?s)vrf1.*interface GigabitEthernet0/0/0/2.*address-family ipv4.*discovery transport-address interface')
+        self.assertRegex(str(out['PE1']), '(?s)vrf1.*interface GigabitEthernet0/0/0/1.*address-family ipv4.*discovery transport-address 2.3.4.5')
+        self.assertRegex(str(out['PE2']), '(?s)vrf1.*interface GigabitEthernet0/0/0/2.*address-family ipv4.*discovery transport-address interface')
 
     def test_7_per_neighbor(self):
 
@@ -691,7 +682,7 @@ class test_ldp(unittest.TestCase):
         nbr1 = IPv4LsrNeighbor('1.2.3.4:0')
         nbr2 = IPv4LsrNeighbor('1.2.3.5:0')
         nbr3 = IPv4LsrNeighbor('1.2.3.6:0')
-        
+
 
         ldp.device_attr['PE1'].password_type = 'clear'
         ldp.device_attr['PE1'].password = 'password1'
@@ -706,34 +697,31 @@ class test_ldp(unittest.TestCase):
 
         # ==Test per neighbor config==
         out = ldp.build_config(apply=False)
-        if 1:
-            self.assertRegex(str(out['PE1']), 'neighbor\n.*password clear password1')
-            self.assertRegex(str(out['PE2']), 'neighbor\n.*password encrypted 060506324F41')
-            self.assertRegex(str(out['PE1']), '1.2.3.4:0 password disable')
-            self.assertRegex(str(out['PE1']), '1.2.3.5:0 password clear blah')
-            self.assertRegex(str(out['PE1']), '1.2.3.6:0 password encrypted 060506324F41')
+        self.assertRegex(str(out['PE1']), 'neighbor\n.*password clear password1')
+        self.assertRegex(str(out['PE2']), 'neighbor\n.*password encrypted 060506324F41')
+        self.assertRegex(str(out['PE1']), '1.2.3.4:0 password disable')
+        self.assertRegex(str(out['PE1']), '1.2.3.5:0 password clear blah')
+        self.assertRegex(str(out['PE1']), '1.2.3.6:0 password encrypted 060506324F41')
 
         # Check nbr config - nbr <1.2.3.5:0'> config filter
         out = ldp.build_config(apply=False, attributes='device_attr__*__vrf_attr__*__neighbor_attr__1.2.3.5:0')
-        if 1:
-            self.assertNotRegex(str(out['PE1']), 'neighbor\n.*password clear password1')
-            self.assertNotRegex(str(out['PE2']), 'neighbor\n.*password encrypted 060506324F41')
-            self.assertNotRegex(str(out['PE1']), '1.2.3.4:0 password disable')
-            self.assertRegex(str(out['PE1']), '1.2.3.5:0 password clear blah')
-            self.assertNotRegex(str(out['PE1']), '1.2.3.6:0 password encrypted 060506324F41')
+        self.assertNotRegex(str(out['PE1']), 'neighbor\n.*password clear password1')
+        self.assertNotRegex(str(out['PE2']), 'neighbor\n.*password encrypted 060506324F41')
+        self.assertNotRegex(str(out['PE1']), '1.2.3.4:0 password disable')
+        self.assertRegex(str(out['PE1']), '1.2.3.5:0 password clear blah')
+        self.assertNotRegex(str(out['PE1']), '1.2.3.6:0 password encrypted 060506324F41')
 
         # Check nbr unconfig - nbr <1.2.3.5:0'> config filter
         out = ldp.build_unconfig(apply=False, attributes='device_attr__*__vrf_attr__*__neighbor_attr__1.2.3.4:0__disable_password')
-        if 1:
-            self.assertNotRegex(str(out['PE1']), 'neighbor\n.*password clear password1')
-            self.assertNotRegex(str(out['PE2']), 'neighbor\n.*password encrypted 060506324F41')
-            self.assertRegex(str(out['PE1']), 'no 1.2.3.4:0 password disable')
-            self.assertNotRegex(str(out['PE1']), '1.2.3.5:0 password clear blah')
-            self.assertNotRegex(str(out['PE1']), '1.2.3.6:0 password encrypted 060506324F41')
+        self.assertNotRegex(str(out['PE1']), 'neighbor\n.*password clear password1')
+        self.assertNotRegex(str(out['PE2']), 'neighbor\n.*password encrypted 060506324F41')
+        self.assertRegex(str(out['PE1']), 'no 1.2.3.4:0 password disable')
+        self.assertNotRegex(str(out['PE1']), '1.2.3.5:0 password clear blah')
+        self.assertNotRegex(str(out['PE1']), '1.2.3.6:0 password encrypted 060506324F41')
 
         out = ldp.build_unconfig(apply=False, attributes='device_attr__*__vrf_attr__*__neighbor_attr__1.2.3.5:0__password')
         self.assertRegex(str(out['PE1']), 'no 1.2.3.5:0 password clear blah')
-   
+
         out = ldp.build_unconfig(apply=False, attributes='device_attr__*__vrf_attr__*__neighbor_attr__1.2.3.6:0__password')
         self.assertRegex(str(out['PE1']), 'no 1.2.3.6:0 password encrypted 060506324F41')
 
@@ -774,10 +762,9 @@ class test_ldp(unittest.TestCase):
 
         # ==Test per vrf per neighbor config==
         out = ldp.build_config(apply=False)
-        if 1:
-            self.assertRegex(str(out['PE1']), '(?s)vrf1\n.*neighbor\n.*1.2.3.4:0 password disable')
-            self.assertRegex(str(out['PE1']), '(?s)vrf1\n.*neighbor\n.*1.2.3.5:0 password clear blah22')
-            self.assertRegex(str(out['PE1']), '(?s)vrf1\n.*neighbor\n.*1.2.3.6:0 password encrypted 060506324F41')
+        self.assertRegex(str(out['PE1']), '(?s)vrf1\n.*neighbor\n.*1.2.3.4:0 password disable')
+        self.assertRegex(str(out['PE1']), '(?s)vrf1\n.*neighbor\n.*1.2.3.5:0 password clear blah22')
+        self.assertRegex(str(out['PE1']), '(?s)vrf1\n.*neighbor\n.*1.2.3.6:0 password encrypted 060506324F41')
 
     def test_9_per_af_per_neighbor(self):
 
@@ -923,11 +910,10 @@ class test_ldp(unittest.TestCase):
 
         # ==Test per vrf per address family per neighbor config==
         out = ldp.build_config(apply=False)
-        if 1:
-            self.assertRegex(str(out['PE1']), '(?s)vrf1.*address-family ipv4\n.*label.*local.*advertise.*to 1.2.3.5:0 for acl1')
-            self.assertRegex(str(out['PE1']), '(?s)vrf1.*address-family ipv4\n.*label.*local.*advertise.*to 1.2.3.6:0 for acl2')
-            self.assertRegex(str(out['PE1']), '(?s)vrf1.*address-family ipv4.*label.*remote.*accept.*from 1.2.3.7:0 for acl1')
-            self.assertRegex(str(out['PE1']), '(?s)vrf1.*address-family ipv4.*label.*remote.*accept.*from 1.2.3.8:0 for acl2')
+        self.assertRegex(str(out['PE1']), '(?s)vrf1.*address-family ipv4\n.*label.*local.*advertise.*to 1.2.3.5:0 for acl1')
+        self.assertRegex(str(out['PE1']), '(?s)vrf1.*address-family ipv4\n.*label.*local.*advertise.*to 1.2.3.6:0 for acl2')
+        self.assertRegex(str(out['PE1']), '(?s)vrf1.*address-family ipv4.*label.*remote.*accept.*from 1.2.3.7:0 for acl1')
+        self.assertRegex(str(out['PE1']), '(?s)vrf1.*address-family ipv4.*label.*remote.*accept.*from 1.2.3.8:0 for acl2')
 
     def test_x3_config_from_ldp_job(self):
 
@@ -963,21 +949,20 @@ class test_ldp(unittest.TestCase):
 
         # ==Test LDP GR config from LDP Tier1 job==
         out = ldp.build_config(apply=False)
-        if 1:
-            self.assertRegex(str(out['PE1']), 'router-id 1.1.1.1')
-            self.assertRegex(str(out['PE1']), 'graceful-restart')
-            self.assertRegex(str(out['PE1']), 'session protection')
-            self.assertRegex(str(out['PE1']), 'nsr')
-            self.assertRegex(str(out['PE1']), 'address-family ipv4')
-            self.assertRegex(str(out['PE2']), 'address-family ipv4')
+        self.assertRegex(str(out['PE1']), 'router-id 1.1.1.1')
+        self.assertRegex(str(out['PE1']), 'graceful-restart')
+        self.assertRegex(str(out['PE1']), 'session protection')
+        self.assertRegex(str(out['PE1']), 'nsr')
+        self.assertRegex(str(out['PE1']), 'address-family ipv4')
+        self.assertRegex(str(out['PE2']), 'address-family ipv4')
 
-            for intf_obj in ldp.device_attr['PE1'].interfaces:
-                self.assertRegex(str(out['PE1']), '(?s)interface {name}.*address-family ipv4'.
-                                             format(name=intf_obj.name))
+        for intf_obj in ldp.device_attr['PE1'].interfaces:
+            self.assertRegex(str(out['PE1']), '(?s)interface {name}.*address-family ipv4'.
+                                         format(name=intf_obj.name))
 
-            for intf_obj in ldp.device_attr['PE2'].interfaces:
-                self.assertRegex(str(out['PE2']), '(?s)interface {name}.*address-family ipv4'.
-                                             format(name=intf_obj.name))
+        for intf_obj in ldp.device_attr['PE2'].interfaces:
+            self.assertRegex(str(out['PE2']), '(?s)interface {name}.*address-family ipv4'.
+                                         format(name=intf_obj.name))
 
         # ==Test LDP GR unconfig from LDP Tier1 job==
         out = ldp.build_unconfig(apply=False)

@@ -14,8 +14,6 @@ def sendbrk_handler(spawn, break_count):
             None
     '''
 
-    count = 1
-    while count < break_count:
+    for _ in range(1, break_count):
         spawn.sendline("\003")
         time.sleep(.002)
-        count += 1

@@ -159,9 +159,7 @@ class Device(genie.libs.conf.device.cisco.Device):
                 'Cannot determine {} connected node from prompt {}'.format(
                     self.name,
                     re.escape(output)))
-        node = m.group('node')
-
-        return node
+        return m.group('node')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

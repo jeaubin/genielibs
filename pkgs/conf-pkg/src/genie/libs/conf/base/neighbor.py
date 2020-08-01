@@ -54,7 +54,7 @@ class IPNeighbor(Neighbor):
     def __new__(cls, *args, **kwargs):
 
         factory_cls = cls
-        if cls is IPNeighbor:
+        if factory_cls is IPNeighbor:
             if not kwargs and len(args) == 1 \
                     and isinstance(args[0], IPNeighbor):
                 # Copy constructor
@@ -70,10 +70,9 @@ class IPNeighbor(Neighbor):
                 if isinstance(ip, (ipaddress.IPv4Interface,
                                    ipaddress.IPv6Interface)):
                     ip = ip.ip
-                elif isinstance(ip, (ipaddress.IPv4Address,
-                                     ipaddress.IPv6Address)):
-                    pass
-                else:
+                elif not isinstance(
+                    ip, (ipaddress.IPv4Address, ipaddress.IPv6Address)
+                ):
                     ip = ipaddress.ip_address(ip)
                 if isinstance(ip, ipaddress.IPv4Address):
                     factory_cls = IPv4Neighbor
@@ -82,7 +81,7 @@ class IPNeighbor(Neighbor):
                 else:
                     raise ValueError(ip)
 
-        if factory_cls is not cls:
+        if factory_cls is not factory_cls:
             self = factory_cls.__new__(factory_cls, *args, **kwargs)
         elif super().__new__ is object.__new__:
             self = super().__new__(factory_cls)
@@ -101,9 +100,7 @@ class IPNeighbor(Neighbor):
     def __init__(self, ip, **kwargs):
         if isinstance(ip, (ipaddress.IPv4Interface, ipaddress.IPv6Interface)):
             ip = ip.ip
-        elif isinstance(ip, (ipaddress.IPv4Address, ipaddress.IPv6Address)):
-            pass
-        else:
+        elif not isinstance(ip, (ipaddress.IPv4Address, ipaddress.IPv6Address)):
             ip = ipaddress.ip_address(ip)
         self._ip = ip
         super().__init__(**kwargs)
@@ -120,10 +117,9 @@ class IPNeighbor(Neighbor):
 class IPv4Neighbor(IPNeighbor):
 
     def __init__(self, ip, **kwargs):
-        if not kwargs:
-            if isinstance(ip, IPv4Neighbor):
-                # Copy constructor
-                ip = ip.ip
+        if not kwargs and isinstance(ip, IPv4Neighbor):
+            # Copy constructor
+            ip = ip.ip
         if type(ip) is not ipaddress.IPv4Address:
             if isinstance(ip, ipaddress.IPv4Interface):
                 ip = ip.ip
@@ -135,10 +131,9 @@ class IPv4Neighbor(IPNeighbor):
 class IPv6Neighbor(IPNeighbor):
 
     def __init__(self, ip, **kwargs):
-        if not kwargs:
-            if isinstance(ip, IPv6Neighbor):
-                # Copy constructor
-                ip = ip.ip
+        if not kwargs and isinstance(ip, IPv6Neighbor):
+            # Copy constructor
+            ip = ip.ip
         if type(ip) is not ipaddress.IPv6Address:
             if isinstance(ip, ipaddress.IPv6Interface):
                 ip = ip.ip
