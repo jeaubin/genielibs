@@ -73,21 +73,10 @@ class test_xconnect(unittest.TestCase):
 
         cfgs = xc1.build_config(apply=False)
         self.assertCountEqual(cfgs.keys(), [dev1.name])
-        if False:
-            self.assertMultiLineEqual(str(cfgs[dev1.name]), '\n'.join([
-                'l2vpn',
-                ' xconnect group xc1g',
-                '  p2p xc1',
-                '   interface GigabitEthernet0/0/0/1',
-                '   exit',
-                '  exit',
-                ' exit',
-                ]))
-
-        dev2.add_feature(xc1)    
+        dev2.add_feature(xc1)
         xc1.xconnect_type = Xconnect.Type.mp2mp
         xc1.autodiscovery_bgp.enabled = True
-        xc1.autodiscovery_bgp.signaling_protocol_bgp.enabled = True     
+        xc1.autodiscovery_bgp.signaling_protocol_bgp.enabled = True
         xc1.autodiscovery_bgp.export_route_targets = [RouteTarget.ImportExport('1.1.1.1:1')]
         xc1.autodiscovery_bgp.import_route_targets = [RouteTarget.ImportExport('1.1.1.1:1')]
         xc1.autodiscovery_bgp.rd = '1000:1'

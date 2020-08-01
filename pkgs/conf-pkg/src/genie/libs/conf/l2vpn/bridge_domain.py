@@ -335,9 +335,7 @@ class BridgeDomain(DeviceFeature):
                             parent_interface)
         elif isinstance(segment, Pseudowire):
             pass
-        elif isinstance(segment, Vfi):
-            pass
-        else:
+        elif not isinstance(segment, Vfi):
             raise ValueError(segment)
         return link_interfaces
 
@@ -567,10 +565,9 @@ class BridgeDomain(DeviceFeature):
             yield from self.evis
 
         def create_pseudowire_neighbor(self, **kwargs):
-            pwnbr = PseudowireNeighbor(container=self.parent,
+            return PseudowireNeighbor(container=self.parent,
                                        device=self.device,
                                        **kwargs)
-            return pwnbr
 
         def __init__(self, parent, key):
             super().__init__(parent, key)

@@ -524,12 +524,10 @@ class Stream(ConfigurableBase):
         if source_instance is not None:
             return 1
         source = self.source
-        if isinstance(source, Interface):
+        if isinstance(source, Interface) or not isinstance(source, Range):
             return 1  # TODO source.count
-        elif isinstance(source, Range):
-            return len(source)
         else:
-            return 1
+            return len(source)
 
     destination = managedattribute(
         name='destination',
@@ -697,9 +695,10 @@ class Stream(ConfigurableBase):
                 source_tgen_interface = self.source_tgen_interface
                 layer2_peer_interfaces = source_tgen_interface.layer2_peer_interfaces
                 if layer2_peer_interfaces:
-                    if destination in layer2_peer_interfaces:
-                        if getattr(destination, 'effective_mac_address', None):
-                            return destination.effective_mac_address
+                    if destination in layer2_peer_interfaces and getattr(
+                        destination, 'effective_mac_address', None
+                    ):
+                        return destination.effective_mac_address
                 else:
                     # TODO use self.mac_discovery_gateway?
                     gateway_interface = source_tgen_interface.gateway_interface
@@ -802,18 +801,18 @@ class Stream(ConfigurableBase):
                 pass
         source = self.source
         if isinstance(source, Interface):
-            peer_interfaces = set([
+            peer_interfaces = {
                 interface
                 for link in source.links
                 for interface in link.interfaces
-                if interface is not source and
-                interface.obj_state == 'active'])
+                if interface is not source and interface.obj_state == 'active'
+            }
+
             if len(peer_interfaces) == 1:
                 try:
                     return getattr(tuple(peer_interfaces)[0], ip_attr).ip
                 except AttributeError:
                     pass
-        if isinstance(source, Interface):
             ip_value = getattr(source, ip_attr)
             if ip_value:
                 return ip_value.network.broadcast_address
@@ -871,7 +870,12 @@ class Stream(ConfigurableBase):
         elif isinstance(start, range_type):
             start = start.start
         else:
-            raise ValueError('mac_discovery_gateway_range: Unexpected mac_discovery_gateway {!r}'.format(self.mac_discovery_gateway))
+            raise ValueError(
+                'mac_discovery_gateway_range: Unexpected mac_discovery_gateway {!r}'.format(
+                    start
+                )
+            )
+
         start = int(start)
         step = self.mac_discovery_gateway_step
         count = self.mac_discovery_gateway_count
@@ -1395,7 +1399,7 @@ class Stream(ConfigurableBase):
         elif isinstance(start, range_type):
             start = start.start
         else:
-            raise ValueError('source_ip_range: Unexpected source_ip {!r}'.format(self.source_ip))
+            raise ValueError('source_ip_range: Unexpected source_ip {!r}'.format(start))
         start = int(start)
         step = self.source_ip_step
         count = self.source_ip_count
@@ -1498,7 +1502,12 @@ class Stream(ConfigurableBase):
         elif isinstance(start, range_type):
             start = start.start
         else:
-            raise ValueError('destination_ip_range: Unexpected destination_ip {!r}'.format(self.destination_ip))
+            raise ValueError(
+                'destination_ip_range: Unexpected destination_ip {!r}'.format(
+                    start
+                )
+            )
+
         start = int(start)
         step = self.destination_ip_step
         count = self.destination_ip_count

@@ -71,7 +71,7 @@ def clean_cli_output(output, cmd=None, os=None,
             output = output[:m.start('line')] + output[m.end('line'):]
 
     if remove_prompt:
-        for once in [1]:
+        for _ in [1]:
             m = re.search(r'''
                 (?:^|\n)
                 (?P<prompt>

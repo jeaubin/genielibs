@@ -77,13 +77,12 @@ class VrfSubAttributes(KeyedSubAttributes):
                 '{cls} only accepts Vrf instances and Vrf names, not {key!r}'.
                 format(cls=cls.__name__, key=key))
         allowed_keys = getattr(cls, 'allowed_keys', None)
-        if allowed_keys is not None:
-            if key not in allowed_keys:
-                raise KeyError(
-                    '{cls} only accepts {allowed_keys}, not {key!r}'.\
-                    format(cls=cls.__name__,
-                           allowed_keys=allowed_keys,
-                           key=key))
+        if allowed_keys is not None and key not in allowed_keys:
+            raise KeyError(
+                '{cls} only accepts {allowed_keys}, not {key!r}'.\
+                format(cls=cls.__name__,
+                       allowed_keys=allowed_keys,
+                       key=key))
 
     @property
     def interfaces(self):
@@ -115,9 +114,8 @@ class Vrf(DeviceFeature):
 
     @property
     def interfaces(self):
-        return frozenset([interface
-                          for interface in self.testbed.interfaces
-                          if interface.vrf is self])
+        return frozenset(interface for interface in self.testbed.interfaces
+                              if interface.vrf is self)
 
     name = managedattribute(
         name='name',
@@ -329,16 +327,14 @@ class Vrf(DeviceFeature):
         @property
         def vnis(self):
             device = self.device
-            return frozenset([vni
-                              for vni in self.parent.vnis
-                              if vni.device is device])
+            return frozenset(vni for vni in self.parent.vnis
+                                  if vni.device is device)
 
         @property
         def interfaces(self):
             device = self.device
-            return frozenset([interface
-                              for interface in self.parent.interfaces
-                              if interface.device is device])
+            return frozenset(interface for interface in self.parent.interfaces
+                                  if interface.device is device)
 
         export_route_targets = managedattribute(
             name='export_route_targets',
@@ -536,10 +532,6 @@ class Vrf(DeviceFeature):
         # List of mapped conf objects
         conf_obj_list = []
 
-        # Main structure attributes in the conf object
-        structure_keys = ['address_family_attr',
-                          'route_target_attr',
-                          'protocol_attr']
         if len(new_vrf):
             for vrf in new_vrf['vrf'].keys():
                 if 'address_family_attr' in new_vrf['vrf'][vrf]:
@@ -553,6 +545,10 @@ class Vrf(DeviceFeature):
 
 
 
+            # Main structure attributes in the conf object
+            structure_keys = ['address_family_attr',
+                              'route_target_attr',
+                              'protocol_attr']
             for vrf in new_vrf['vrf'].keys():
                 conf_obj = self(name=vrf)
                 # Pass the class method not the instnace.

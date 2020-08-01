@@ -73,14 +73,14 @@ class IgmpGroup(ConfigurableBase):
         group_current = self.join_group if self.join_group else self.static_group
         group_previous = other.join_group if other.join_group else other.static_group
 
-        source_current = self.join_group_source_addr if \
-            self.join_group_source_addr else self.static_group_source_addr
-        source_previous = other.join_group_source_addr if \
-            other.join_group_source_addr else other.static_group_source_addr
-
         # Comparing same types
         if type(group_current) == type(group_previous):
             if group_current == group_previous:
+                source_current = self.join_group_source_addr if \
+                    self.join_group_source_addr else self.static_group_source_addr
+                source_previous = other.join_group_source_addr if \
+                    other.join_group_source_addr else other.static_group_source_addr
+
                 return source_current < source_previous
             return group_current < group_previous
         else:

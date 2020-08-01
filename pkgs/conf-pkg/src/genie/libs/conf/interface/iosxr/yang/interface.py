@@ -264,10 +264,8 @@ class EthernetInterface(PhysicalInterface, genie.libs.conf.interface.EthernetInt
         else:
             shutdown = attributes.value('shutdown')
             if shutdown is not None:
-                if unconfig:
+                if unconfig or shutdown:
                     # Special case: unconfiguring always applies shutdown
-                    interface_configuration.shutdown = Empty()
-                elif shutdown:
                     interface_configuration.shutdown = Empty()
                 else:
                     interface_configuration.shutdown = DELETE()

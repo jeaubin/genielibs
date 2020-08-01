@@ -22,14 +22,15 @@ class TopologyMarkupProcessor(Processor):
             if not match: break
 
             # support for self keyword
-            if match.group(2) == 'self' or match.group(2).startswith('self.'):
-                if index[0] != 'devices':
-                        raise MarkupError(
-                                "Keyword 'self' can only be used within "
-                                "'devices' section:\n"
-                                "Index: %s\n"
-                                "Markup: %s" % ('.'.join(index), 
-                                                match.group(0)))
+            if (
+                match.group(2) == 'self' or match.group(2).startswith('self.')
+            ) and index[0] != 'devices':
+                raise MarkupError(
+                        "Keyword 'self' can only be used within "
+                        "'devices' section:\n"
+                        "Index: %s\n"
+                        "Markup: %s" % ('.'.join(index), 
+                                        match.group(0)))
 
             if match.group(2) == 'self':
                 # self represents device name (index:1)
@@ -66,10 +67,10 @@ class TopologyMarkupProcessor(Processor):
                                           "Index: %s\n"
                                           "Markup: %s\n"
                                           %  ('.'.join(index), match.group(0)))
-        
+
                 # do replacement
                 data = data.replace(data[slice(*match.span(0))], str(value))
-                
+
         return data
 
 

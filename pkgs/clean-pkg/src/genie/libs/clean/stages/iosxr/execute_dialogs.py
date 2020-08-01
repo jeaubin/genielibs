@@ -187,38 +187,38 @@ class TftpRommonDialog(RommonDialog):
 
     @statement_decorator(r'(.*)(rommon(.*))+>.*', loop_continue=True, continue_timer=False)
     def boot_device(spawn, session, context):
-        ''' Load new image on the device from rommon with tftp '''
+          ''' Load new image on the device from rommon with tftp '''
 
-        log.info("Assigning boot variables in rommon...")
+          log.info("Assigning boot variables in rommon...")
 
-        # rommon arg name mapping
-        mapping_list = {
-            'ip': 'IP_ADDRESS',
-            'subnet_mask': 'IP_SUBNET_MASK',
-            'gateway': 'DEFAULT_GATEWAY',
-            'tftp_server': 'TFTP_SERVER',
-        }
+          # rommon arg name mapping
+          mapping_list = {
+              'ip': 'IP_ADDRESS',
+              'subnet_mask': 'IP_SUBNET_MASK',
+              'gateway': 'DEFAULT_GATEWAY',
+              'tftp_server': 'TFTP_SERVER',
+          }
 
-        for item in mapping_list:
-            log.info("\nSet '{}' to {}".format(mapping_list[item], context[item]))
-            try:
-                spawn.sendline("{}={}".format(mapping_list[item], context[item]))
-            except Exception as e:
-                log.error(str(e))
-                raise Exception("Unable to set {}={}".format(item, goto=['exit']))
+          for item, value in mapping_list.items():
+                log.info("\nSet '{}' to {}".format(mapping_list[item], context[item]))
+                try:
+                      spawn.sendline("{}={}".format(value, context[item]))
+                except Exception as e:
+                    log.error(str(e))
+                    raise Exception("Unable to set {}={}".format(item, goto=['exit']))
 
 
-        # Build the boot command
-        boot_cmd = 'boot tftp://{tftp}/{image}'.format(tftp=context['tftp_server'],
-                                                       image=context['image'][0])
+          # Build the boot command
+          boot_cmd = 'boot tftp://{tftp}/{image}'.format(tftp=context['tftp_server'],
+                                                         image=context['image'][0])
 
-        # Send the boot command to the device
-        log.info("Sending TFTP boot command...")
-        try:
-            spawn.sendline(boot_cmd)
-        except Exception as e:
-            raise Exception("Unable to boot {} error {}".format(boot_cmd, str(e)),
-                                                                goto=['exit'])
+          # Send the boot command to the device
+          log.info("Sending TFTP boot command...")
+          try:
+              spawn.sendline(boot_cmd)
+          except Exception as e:
+              raise Exception("Unable to boot {} error {}".format(boot_cmd, str(e)),
+                                                                  goto=['exit'])
 
 
     # Username

@@ -126,9 +126,7 @@ class Device(HltapiDevice):
             if 'dest_port_list' in kwargs:
                 kwargs.setdefault('port_handle2', kwargs.pop('dest_port_list'))
 
-            hltkl = self.pyats_connection.traffic_config(**kwargs)
-
-            return hltkl
+            return self.pyats_connection.traffic_config(**kwargs)
 
         def traffic_control(self, **kwargs):
 
@@ -145,9 +143,7 @@ class Device(HltapiDevice):
             if 'port_handle' not in kwargs:
                 kwargs['port_handle'] = self.device.all_port_handles
 
-            hltkl = self.pyats_connection.traffic_control(**kwargs)
-
-            return hltkl
+            return self.pyats_connection.traffic_control(**kwargs)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

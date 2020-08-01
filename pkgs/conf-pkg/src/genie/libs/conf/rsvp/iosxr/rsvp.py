@@ -14,16 +14,12 @@ def format_bw_unit_percent(bw, unit, percent):
     if bw is None:
         return ''
     s = ' '
-    if percent:
-        s += '{}'.format(bw)
-    elif unit is None:
+    if percent or unit is None:
         s += '{}'.format(bw)
     elif unit is _Rsvp.BwUnit.kbps:
         s += '{} kbps'.format(bw)
     elif unit is _Rsvp.BwUnit.mbps:
         s += '{} mbps'.format(bw // 1000)
-    elif unit is _Rsvp.BwUnit.mbps:
-        s += '{} gbps'.format(bw // 1000000)
     else:
         raise ValueError(unit)
     return s
@@ -319,17 +315,12 @@ class Rsvp(ABC):
                     # iosxr: rsvp / interface <name> / signalling rate-limit rate 1
                     # iosxr: rsvp / interface <name> / signalling rate-limit rate 1 interval 250
                     v = attributes.value('sig_rate_limit')
-                    if v is not None:
-                        if v is False:
-                            pass
-                        else:
-                            cfg = 'signalling rate-limit'
-                            if v is True:
-                                pass
-                            else:
-                                cfg += ' rate {}'.format(v)
-                                cfg += attributes.format(' interval {sig_rate_limit_interval}', force=True)
-                            configurations.append_line(cfg)
+                    if v is not None and v is not False:
+                        cfg = 'signalling rate-limit'
+                        if v is not True:
+                            cfg += ' rate {}'.format(v)
+                            cfg += attributes.format(' interval {sig_rate_limit_interval}', force=True)
+                        configurations.append_line(cfg)
 
                     # iosxr: rsvp / interface <name> / signalling refresh interval 10
                     configurations.append_line(attributes.format('signalling refresh interval {sig_refresh_interval}'))
@@ -400,28 +391,31 @@ class Rsvp(ABC):
                         # iosxr: rsvp / interface <name> / bandwidth
                         configurations.append_line('bandwidth')
 
-                    if not self.mam_bw_percentage \
-                            or not self.isinherited('mam_bw_percentage') \
-                            or not self.isinherited('mam_bw_total'):
-                        if attributes.value('mam_bw_max_reservable') is not None \
-                                or attributes.value('mam_bw_total') is not None:
-                            # iosxr: rsvp / interface <name> / bandwidth mam [max-reservable-bw] [<0-4294967295> [<0-4294967295> [Kbps|Mbps|Gbps]] [bc0 <0-4294967295> [Kbps|Mbps|Gbps] [bc1 <0-4294967295> [Kbps|Mbps|Gbps]]]]
-                            # iosxr: rsvp / interface <name> / bandwidth mam percentage [max-reservable-bw] [<0-10000> [<0-10000>] [bc0 <0-10000> [bc1 <0-10000>]]]
-                            cfg = 'bandwidth mam'
-                            if self.mam_bw_percentage:
-                                cfg += ' percentage'
-                            if self.mam_bw_max_reservable:
-                                cfg += ' max-reservable-bw'
-                            if self.mam_bw_total is not None:
-                                cfg += format_bw_unit_percent(self.mam_bw_total, self.mam_bw_total_unit, self.mam_bw_percentage)
-                                cfg += format_bw_unit_percent(self.mam_bw_largest, self.mam_bw_largest_unit, self.mam_bw_percentage)
-                                if self.mam_bw_bc0 is not None:
-                                    cfg += ' bc0'
-                                    cfg += format_bw_unit_percent(self.mam_bw_bc0, self.mam_bw_bc0_unit, self.mam_bw_percentage)
-                                    if self.mam_bw_bc1 is not None:
-                                        cfg += ' bc1'
-                                        cfg += format_bw_unit_percent(self.mam_bw_bc1, self.mam_bw_bc1_unit, self.mam_bw_percentage)
-                            configurations.append_line(cfg)
+                    if (
+                        not self.mam_bw_percentage
+                        or not self.isinherited('mam_bw_percentage')
+                        or not self.isinherited('mam_bw_total')
+                    ) and (
+                        attributes.value('mam_bw_max_reservable') is not None
+                        or attributes.value('mam_bw_total') is not None
+                    ):
+                        # iosxr: rsvp / interface <name> / bandwidth mam [max-reservable-bw] [<0-4294967295> [<0-4294967295> [Kbps|Mbps|Gbps]] [bc0 <0-4294967295> [Kbps|Mbps|Gbps] [bc1 <0-4294967295> [Kbps|Mbps|Gbps]]]]
+                        # iosxr: rsvp / interface <name> / bandwidth mam percentage [max-reservable-bw] [<0-10000> [<0-10000>] [bc0 <0-10000> [bc1 <0-10000>]]]
+                        cfg = 'bandwidth mam'
+                        if self.mam_bw_percentage:
+                            cfg += ' percentage'
+                        if self.mam_bw_max_reservable:
+                            cfg += ' max-reservable-bw'
+                        if self.mam_bw_total is not None:
+                            cfg += format_bw_unit_percent(self.mam_bw_total, self.mam_bw_total_unit, self.mam_bw_percentage)
+                            cfg += format_bw_unit_percent(self.mam_bw_largest, self.mam_bw_largest_unit, self.mam_bw_percentage)
+                            if self.mam_bw_bc0 is not None:
+                                cfg += ' bc0'
+                                cfg += format_bw_unit_percent(self.mam_bw_bc0, self.mam_bw_bc0_unit, self.mam_bw_percentage)
+                                if self.mam_bw_bc1 is not None:
+                                    cfg += ' bc1'
+                                    cfg += format_bw_unit_percent(self.mam_bw_bc1, self.mam_bw_bc1_unit, self.mam_bw_percentage)
+                        configurations.append_line(cfg)
 
                 return str(configurations)
 

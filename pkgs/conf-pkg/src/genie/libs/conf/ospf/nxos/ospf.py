@@ -792,7 +792,7 @@ class Ospf(ABC):
 
                         # interface GigabitEthernet1
                         with configurations.submode_context(
-                            attributes.format('interface {interface_name}', force=True)):
+                                attributes.format('interface {interface_name}', force=True)):
 
                             # interface GigabitEthernet1
                             #   ip ospf 1 area 2
@@ -809,7 +809,7 @@ class Ospf(ABC):
                             if attributes.value('if_type'):
                                 iftype = attributes.value('if_type').value
                                 # Configure acceptable interface types
-                                if iftype == 'broadcast' or iftype == 'point-to-point':
+                                if iftype in ['broadcast', 'point-to-point']:
                                     configurations.append_line(attributes.format('ip ospf network {}'.format(iftype)))
 
                             # passive-interface GigabitEthernet1

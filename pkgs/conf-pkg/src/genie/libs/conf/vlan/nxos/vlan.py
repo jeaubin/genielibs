@@ -147,60 +147,61 @@ class Vlan(ABC):
 
             def build_config(self, apply=True, attributes=None, unconfig=False,
                              **kwargs):
-                    assert not apply
-                    attributes = AttributesHelper(self, attributes)
-                    configurations = CliConfigBuilder(unconfig=unconfig)
-                    with configurations.submode_context(
-                        attributes.format('vlan access-map {access_map_id}',
-                                          force=True)):
-                        if unconfig and attributes.iswildcard:
-                            # Never reached!
-                            configurations.submode_unconfig()
+                assert not apply
+                attributes = AttributesHelper(self, attributes)
+                configurations = CliConfigBuilder(unconfig=unconfig)
+                with configurations.submode_context(
+                            attributes.format('vlan access-map {access_map_id}',
+                                              force=True)):
+                    if unconfig and attributes.iswildcard:
+                        # Never reached!
+                        configurations.submode_unconfig()
 
-                        # No point of configuring access_map_sequence
-                        # nxos: vlan access-map <access_map_id> \
-                        # <access_map_sequence>
-                        # A workaround that needs to be better handled
-                        if attributes.value('access_map_sequence'):
-                            configurations.append_line(
-                                attributes.format(
-                                    'no vlan access-map {access_map_id}'))
-                            configurations.append_line(
-                                attributes.format(
-                                    'vlan access-map {access_map_id} '
-                                    '{access_map_sequence}'))
+                    # No point of configuring access_map_sequence
+                    # nxos: vlan access-map <access_map_id> \
+                    # <access_map_sequence>
+                    # A workaround that needs to be better handled
+                    if attributes.value('access_map_sequence'):
+                        configurations.append_line(
+                            attributes.format(
+                                'no vlan access-map {access_map_id}'))
+                        configurations.append_line(
+                            attributes.format(
+                                'vlan access-map {access_map_id} '
+                                '{access_map_sequence}'))
 
-                        # nxos: vlan access-map <access_map_id> / action drop
-                        # nxos: vlan access-map <access_map_id> /action forward
-                        # nxos: vlan access-map <access_map_id> / action \
-                        # redirect <redirect_interface>
-                        if attributes.value('access_map_action') and \
-                           attributes.value('redirect_interface'):
-                            configurations.append_line(
-                                attributes.format(
-                                    'action {access_map_action} '
-                                    '{redirect_interface}'))
-                        else:
-                            configurations.append_line(
-                                attributes.format(
-                                    'action {access_map_action}'))
+                    # nxos: vlan access-map <access_map_id> / action drop
+                    # nxos: vlan access-map <access_map_id> /action forward
+                    # nxos: vlan access-map <access_map_id> / action \
+                    # redirect <redirect_interface>
+                    if attributes.value('access_map_action') and \
+                       attributes.value('redirect_interface'):
+                        configurations.append_line(
+                            attributes.format(
+                                'action {access_map_action} '
+                                '{redirect_interface}'))
+                    else:
+                        configurations.append_line(
+                            attributes.format(
+                                'action {access_map_action}'))
 
                         # nxos: vlan access-map <access_map_id> / statistics
                         # nxos: vlan access-map <access_map_id> / exit
                         # nxos: vlan access-map <access_map_id> / match
-                        if attributes.value('access_map_match'):
-                            if attributes.value('access_list_name'):
-                                configurations.append_line(
-                                    attributes.format('match {access_map_match}'
-                                                      ' address {access_list}'))
+                    if attributes.value('access_map_match') and attributes.value(
+                        'access_list_name'
+                    ):
+                        configurations.append_line(
+                            attributes.format('match {access_map_match}'
+                                              ' address {access_list}'))
 
-                        # nxos: vlan access-map <access_map_id> / no
-                        # nxos: vlan access-map <access_map_id> / this
-                        # nxos: vlan access-map <access_map_id> / pop
-                        # nxos: vlan access-map <access_map_id> / push
-                        # nxos: vlan access-map <access_map_id> / where
+                            # nxos: vlan access-map <access_map_id> / no
+                            # nxos: vlan access-map <access_map_id> / this
+                            # nxos: vlan access-map <access_map_id> / pop
+                            # nxos: vlan access-map <access_map_id> / push
+                            # nxos: vlan access-map <access_map_id> / where
 
-                    return str(configurations)
+                return str(configurations)
 
             def build_unconfig(self, apply=True, attributes=None, **kwargs):
                 return self.build_config(apply=apply, attributes=attributes,

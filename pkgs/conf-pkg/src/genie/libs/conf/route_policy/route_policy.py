@@ -407,19 +407,14 @@ class RoutePolicyAttributes(object):
             if cond.rpl_test_condition(obj, getattr=getattr):
                 sub_pass_on = cond.if_attr.rpl_apply_attributes(obj,
                     setattr=setattr, getattr=getattr)
-                if sub_pass_on is not None:
-                    if sub_pass_on:
-                        implicit_pass_on = True
-                    else:
-                        return False
             else:
                 sub_pass_on = cond.else_attr.rpl_apply_attributes(obj,
                     setattr=setattr, getattr=getattr)
-                if sub_pass_on is not None:
-                    if sub_pass_on:
-                        implicit_pass_on = True
-                    else:
-                        return False
+            if sub_pass_on is not None:
+                if sub_pass_on:
+                    implicit_pass_on = True
+                else:
+                    return False
         if self.set_nexthop is not None:
             setattr(obj, 'nexthop', self.set_nexthop)
             implicit_pass_on = True

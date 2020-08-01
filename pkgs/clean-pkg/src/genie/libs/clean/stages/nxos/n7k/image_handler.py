@@ -24,11 +24,7 @@ class ImageHandler(CommonImageHandler):
                                         "\nValid keys are 'kickstart' and 'system'")
 
                     # incase the file key is used
-                    if isinstance(value, dict):
-                        image_list = value['file']
-                    else:
-                        image_list = value
-
+                    image_list = value['file'] if isinstance(value, dict) else value
                     if len(image_list) > 1:
                         raise Exception("Found more than 1 image for '{}' image".\
                                         format(key))

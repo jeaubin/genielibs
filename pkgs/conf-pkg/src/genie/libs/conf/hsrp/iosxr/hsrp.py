@@ -57,7 +57,7 @@ class Hsrp(ABC):
 
                 # interface <interface_name>
                 with configurations.submode_context(attributes.format(
-                        'interface {interface_name}', force=True)):
+                            'interface {interface_name}', force=True)):
 
                     # interface <interface_name>
                     #   hsrp bfd minimim delay <bfd_min_interval>\
@@ -112,7 +112,7 @@ class Hsrp(ABC):
                     # interface <interface_name>
                     #   address-family <address_family>
                     with configurations.submode_context(attributes.format(
-                        'address-family {address_family.name}', force=True)):
+                                'address-family {address_family.name}', force=True)):
 
                         if unconfig and attributes.iswildcard:
                             configurations.submode_unconfig()
@@ -140,7 +140,7 @@ class Hsrp(ABC):
                         #   address-family <address_family>
                         #       hsrp <group_number>
                         with configurations.submode_context(attributes.format(
-                                'hsrp {group_number}', force=True)):
+                                            'hsrp {group_number}', force=True)):
 
                             if unconfig and attributes.iswildcard:
                                 configurations.submode_unconfig()
@@ -167,7 +167,7 @@ class Hsrp(ABC):
                                 #           address <primary_ipv4_address>
                                 configurations.append_line(attributes.format(
                                     'address {primary_ipv4_address}'))
-    
+
                                 # interface <interface_name>
                                 #   address-family <address_family>
                                 #     hsrp <group_number>
@@ -184,7 +184,7 @@ class Hsrp(ABC):
                                 #           address global <global_ipv6_address>
                                 configurations.append_line(attributes.format(
                                     'address global {global_ipv6_address}'))
-    
+
                                 # interface <interface_name>
                                 #   address-family <address_family>
                                 #     hsrp <group_number>
@@ -197,12 +197,13 @@ class Hsrp(ABC):
                                 #   address-family <address_family>
                                 #     hsrp <group_number>
                                 #       address linklocal autoconfig
-                                if attributes.value('hsrp_linklocal'):
-                                    if attributes.value('hsrp_linklocal').name\
-                                     == 'auto':
-                                        configurations.append_line(\
-                                            'address linklocal autoconfig')
-    
+                                if (
+                                    attributes.value('hsrp_linklocal')
+                                    and attributes.value('hsrp_linklocal').name == 'auto'
+                                ):
+                                    configurations.append_line(\
+                                        'address linklocal autoconfig')
+
                             # interface <interface_name>
                             #   address-family <address_family>
                             #       hsrp <group_number>

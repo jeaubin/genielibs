@@ -14,8 +14,6 @@ from genie.libs.conf.address_family import AddressFamily, AddressFamilySubAttrib
 class test_isis(unittest.TestCase):
 
     def setUp(self):
-        pass
-
         testbed = Genie.testbed = Testbed()
         self.dev1 = Device(testbed=testbed, name='PE1', os='iosxe')
         self.dev2 = Device(testbed=testbed, name='PE2', os='iosxe')

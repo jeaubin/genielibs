@@ -8,10 +8,6 @@ from genie.conf.base import Testbed, Device, Link, Interface
 
 from genie.libs.conf.te import Te, Srlg
 
-if 0:
-    print("\n PE1 CONFIG\n" + str(out['PE1']))
-    print("\n PE2 CONFIG\n" + str(out['PE2']))
-
 class test_te(unittest.TestCase):
 
     def setUp(self):
@@ -55,12 +51,6 @@ class test_te(unittest.TestCase):
         self.assertSetEqual(set(te.devices), set([]))
         self.assertSetEqual(set(te.links), set([]))
 
-        if 0:
-            print("before")
-            print(te.devices)
-            print(te.links)
-            print(te.interfaces)
-
         self.link.add_feature(te)
         self.link2.add_feature(te)
         self.link3.add_feature(te)
@@ -69,13 +59,6 @@ class test_te(unittest.TestCase):
         self.assertSetEqual(set(te.links), set([self.link, self.link2, self.link3, self.link4]))
         self.assertSetEqual(set(te.interfaces), set([self.i1, self.i2, self.i3, self.i4, self.i5, self.i6, self.i7, self.i8]))
 
-        if 0:
-            print("after")
-            print(te.links)
-            print(te.devices)
-            print(te.interfaces)
-
-        
         te.log_events_preemption = True
         te.log_events_frr_protection = True
         te.device_attr['PE1'].log_events_frr_protection_type = 'backup-tunnel'
@@ -100,22 +83,21 @@ class test_te(unittest.TestCase):
         te.auto_tun_backup_timers_rem_unused = 100
         te.auto_tun_backup_attr_set = "backup"
 
-        
+
         te.device_attr['PE1'].interface_attr[self.i1].auto_tun_backup_exclude_srlg = True
         te.device_attr['PE1'].interface_attr[self.i3].auto_tun_backup_exclude_srlg = True
         te.device_attr['PE1'].interface_attr[self.i3].auto_tun_backup_exclude_srlg_type = 'preferred'
         te.device_attr['PE1'].interface_attr[self.i5].auto_tun_backup_exclude_srlg = True
         te.device_attr['PE1'].interface_attr[self.i5].auto_tun_backup_exclude_srlg_type = 'weighted'
-        te.device_attr['PE1'].affinity_map_val_dict = {}
-        te.device_attr['PE1'].affinity_map_val_dict['RED'] = "0x2"
+        te.device_attr['PE1'].affinity_map_val_dict = {'RED': "0x2"}
+        te.device_attr['PE2'].affinity_map_bitpos_dict = {
+            'BLUE': 94,
+            'EDGE': 27,
+            'PINK': 95,
+            'GREEN': 91,
+            'METRO': 29,
+        }
 
-        te.device_attr['PE2'].affinity_map_bitpos_dict = {}
-        te.device_attr['PE2'].affinity_map_bitpos_dict['BLUE'] = 94
-        te.device_attr['PE2'].affinity_map_bitpos_dict['EDGE'] = 27
-        te.device_attr['PE2'].affinity_map_bitpos_dict['PINK'] = 95
-        te.device_attr['PE2'].affinity_map_bitpos_dict['GREEN'] = 91
-        te.device_attr['PE2'].affinity_map_bitpos_dict['METRO'] = 29
-        
         out = te.build_config(apply=False)
         self.maxDiff = None
         self.assertCountEqual(out.keys(), ['PE1', 'PE2'])
@@ -150,41 +132,40 @@ class test_te(unittest.TestCase):
             '  exit',
             ' exit',
         ]))
-        
-        if 1:
-            self.assertMultiLineEqual(str(out['PE2']), '\n'.join([
-                'mpls traffic-eng',
-                ' auto-tunnel backup affinity ignore',
-                ' auto-tunnel backup timers removal unused 100',
-                ' auto-tunnel backup tunnel-id min 210 max 600',
-                ' auto-tunnel p2mp tunnel-id min 100 max 200',
-                ' logging events preemption',
-                ' logging events frr-protection primary-lsp active-state',
-                ' reoptimize timers delay cleanup 10',
-                ' reoptimize timers delay installation 1',
-                ' flooding threshold up 1 down 1',
-                ' affinity-map BLUE bit-position 94',
-                ' affinity-map EDGE bit-position 27',
-                ' affinity-map GREEN bit-position 91',
-                ' affinity-map METRO bit-position 29',
-                ' affinity-map PINK bit-position 95',
-                ' affinity-map RED 0x1',
-                ' srlg admin-weight 20000',
-                ' soft-preemption timeout 5',
-                ' interface GigabitEthernet0/0/0/2',
-                '  auto-tunnel backup attribute-set backup',
-                '  exit',
-                ' interface GigabitEthernet0/0/0/4',
-                '  auto-tunnel backup attribute-set backup',
-                '  exit',
-                ' interface GigabitEthernet0/0/0/6',
-                '  auto-tunnel backup attribute-set backup',
-                '  exit',
-                ' interface GigabitEthernet0/0/0/8',
-                '  auto-tunnel backup attribute-set backup',
-                '  exit',
-                ' exit',
-                ]))
+
+        self.assertMultiLineEqual(str(out['PE2']), '\n'.join([
+            'mpls traffic-eng',
+            ' auto-tunnel backup affinity ignore',
+            ' auto-tunnel backup timers removal unused 100',
+            ' auto-tunnel backup tunnel-id min 210 max 600',
+            ' auto-tunnel p2mp tunnel-id min 100 max 200',
+            ' logging events preemption',
+            ' logging events frr-protection primary-lsp active-state',
+            ' reoptimize timers delay cleanup 10',
+            ' reoptimize timers delay installation 1',
+            ' flooding threshold up 1 down 1',
+            ' affinity-map BLUE bit-position 94',
+            ' affinity-map EDGE bit-position 27',
+            ' affinity-map GREEN bit-position 91',
+            ' affinity-map METRO bit-position 29',
+            ' affinity-map PINK bit-position 95',
+            ' affinity-map RED 0x1',
+            ' srlg admin-weight 20000',
+            ' soft-preemption timeout 5',
+            ' interface GigabitEthernet0/0/0/2',
+            '  auto-tunnel backup attribute-set backup',
+            '  exit',
+            ' interface GigabitEthernet0/0/0/4',
+            '  auto-tunnel backup attribute-set backup',
+            '  exit',
+            ' interface GigabitEthernet0/0/0/6',
+            '  auto-tunnel backup attribute-set backup',
+            '  exit',
+            ' interface GigabitEthernet0/0/0/8',
+            '  auto-tunnel backup attribute-set backup',
+            '  exit',
+            ' exit',
+            ]))
 
     def test_UnnumInterfaces(self):
         # Test unnum interface output
@@ -210,21 +191,22 @@ class test_te(unittest.TestCase):
         srlg.name_value_dict['R23'] = 30
         srlg.name_value_dict['R25'] = 40
         srlg.name_value_dict['R34'] = 50
-        
+
         # if per-device dict is not initialized, base class dict will be over-written
-        srlg.device_attr['PE1'].name_value_dict = {}
-        srlg.device_attr['PE1'].name_value_dict['R13'] = 10
-        srlg.device_attr['PE1'].name_value_dict['R11'] = 20
-        srlg.device_attr['PE1'].name_value_dict['R23'] = 30
-        srlg.device_attr['PE1'].name_value_dict['R25'] = 40
-        srlg.device_attr['PE1'].name_value_dict['R34'] = 50
-        srlg.device_attr['PE1'].name_value_dict['R35'] = 60
-        srlg.device_attr['PE1'].name_value_dict['R45'] = 70
-        
+        srlg.device_attr['PE1'].name_value_dict = {
+            'R13': 10,
+            'R11': 20,
+            'R23': 30,
+            'R25': 40,
+            'R34': 50,
+            'R35': 60,
+            'R45': 70,
+        }
+
         srlg.device_attr['PE1'].interface_attr[self.i1].intf_name = 'R13'
         srlg.device_attr['PE1'].interface_attr[self.i3].intf_name = 'R11'
         srlg.device_attr['PE1'].interface_attr[self.i5].intf_name = 'R23'
-        
+
         out = srlg.build_config(apply=False)
         self.assertCountEqual(out.keys(), ['PE1', 'PE2'])
         self.assertMultiLineEqual(str(out['PE1']), '\n'.join([

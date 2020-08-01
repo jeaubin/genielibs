@@ -135,17 +135,17 @@ class PhysicalInterface(Interface,
 
     @property
     def gateway_ipv4(self):
-        gw_ip = None
         gw_intf = self.gateway_interface
         if gw_intf is not None and gw_intf.ipv4:
             return gw_intf.ipv4.ip
         if self.ipv4:
             # Find a linked interface on the same IP network
-            for gw_intf in (intf for intf in self.link.interfaces):
+            for gw_intf in iter(self.link.interfaces):
                 if gw_intf is not self \
                         and gw_intf.ipv4 \
                         and gw_intf.ipv4.network == self.ipv4.network:
                     return gw_intf.ipv4
+            gw_ip = None
             # Pick a dummy IP on the same network
             for gw_ip in self.ipv4.network:
                 if gw_ip != self.ipv4.ip:
@@ -154,17 +154,17 @@ class PhysicalInterface(Interface,
 
     @property
     def gateway_ipv6(self):
-        gw_ip = None
         gw_intf = self.gateway_interface
         if gw_intf is not None and gw_intf.ipv6:
             return gw_intf.ipv6.ip
         if self.ipv6:
             # Find a linked interface on the same IP network
-            for gw_intf in (intf for intf in self.link.interfaces):
+            for gw_intf in iter(self.link.interfaces):
                 if gw_intf is not self \
                         and gw_intf.ipv6 \
                         and gw_intf.ipv6.network == self.ipv6.network:
                     return gw_intf.ipv6
+            gw_ip = None
             # Pick a dummy IP on the same network
             for gw_ip in self.ipv6.network:
                 if gw_ip != self.ipv6.ip:

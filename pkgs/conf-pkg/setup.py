@@ -31,10 +31,8 @@ def build_version_range(version):
     eg: for version '3.4.7', return '>=3.4.0, <3.5.0'
     '''
     req_ver = version.split('.')
-    version_range = '>= %s.%s.0, < %s.%s.0' % \
+    return '>= %s.%s.0, < %s.%s.0' % \
         (req_ver[0], req_ver[1], req_ver[0], int(req_ver[1])+1)
-
-    return version_range
 
 def version_info(*paths):
     '''returns the result of find_version() and build_version_range() tuple'''

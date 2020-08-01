@@ -68,7 +68,7 @@ class Vrf(ABC):
                 configurations = CliConfigBuilder(unconfig=unconfig)
 
                 with configurations.submode_context(attributes.format(
-                    'address-family {address_family.value}', force=True)):
+                        'address-family {address_family.value}', force=True)):
                     if unconfig and attributes.iswildcard:
                         configurations.submode_unconfig()
 
@@ -85,16 +85,15 @@ class Vrf(ABC):
                                               'map {export_to_global_map}', force=True))
 
                     # routing_table_limit_number
-                    if attributes.value('routing_table_limit_number') and \
-                       attributes.value('alert_percent_value'):
-                        configurations.append_line(
-                            attributes.format('maximum routes {routing_table_limit_number} '
-                                              '{alert_percent_value}'))
-                    elif attributes.value('routing_table_limit_number') and \
-                       attributes.value('simple_alert'):
-                        configurations.append_line(
-                            attributes.format('maximum routes {routing_table_limit_number} '
-                                              'warning-only'))
+                    if attributes.value('routing_table_limit_number'):
+                        if attributes.value('alert_percent_value'):
+                            configurations.append_line(
+                                attributes.format('maximum routes {routing_table_limit_number} '
+                                                  '{alert_percent_value}'))
+                        elif attributes.value('simple_alert'):
+                            configurations.append_line(
+                                attributes.format('maximum routes {routing_table_limit_number} '
+                                                  'warning-only'))
 
                     # keep old handle
                     if self.address_family.value == 'ipv4 unicast':
@@ -105,7 +104,7 @@ class Vrf(ABC):
                         if attributes.value('import_route_targets'):
                             for v, attributes3 in attributes.sequence_values('import_route_targets'):
                                 configurations.append_line('route-target import {}'.format(v.route_target))
-                    
+
                     if attributes.value('maximum_routes'):
                         configurations.append(attributes.format('maximum routes {maximum_routes}'))
 

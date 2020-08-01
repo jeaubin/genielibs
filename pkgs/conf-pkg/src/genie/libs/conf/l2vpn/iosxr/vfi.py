@@ -303,19 +303,13 @@ class Vfi(ABC):
 
                 # iosxr: l2vpn / bridge group someword / bridge-domain someword2 / vfi someword3 / neighbor 1.2.3.4 pw-id 1 / igmp snooping profile someword4
                 v = attributes.value('igmp_snooping_profile')
-                if v is not None:
-                    if v is False:
-                        pass
-                    else:
-                        configurations.append_line('igmp snooping profile {}'.format(v))
+                if v is not None and v is not False:
+                    configurations.append_line('igmp snooping profile {}'.format(v))
 
                 # iosxr: l2vpn / bridge group someword / bridge-domain someword2 / vfi someword3 / neighbor 1.2.3.4 pw-id 1 / mld snooping profile someword4
                 v = attributes.value('mld_snooping_profile')
-                if v is not None:
-                    if v is False:
-                        pass
-                    else:
-                        configurations.append_line('mld snooping profile {}'.format(v))
+                if v is not None and v is not False:
+                    configurations.append_line('mld snooping profile {}'.format(v))
 
                 # iosxr: l2vpn / bridge group someword / bridge-domain someword2 / vfi someword3 / neighbor 1.2.3.4 pw-id 1 / mpls static label local 16 remote 16
                 remote_label = attributes.value('mpls_static_label')

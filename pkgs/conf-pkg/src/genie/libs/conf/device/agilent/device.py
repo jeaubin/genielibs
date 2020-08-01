@@ -29,9 +29,7 @@ class Device(HltapiDevice):
             # does for HLTAPI 2.25 2.27 and 2.28)
             kwargs.pop('port_handle', None)
 
-            hltkl = self.pyats_connection.traffic_control(**kwargs)
-
-            return hltkl
+            return self.pyats_connection.traffic_control(**kwargs)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

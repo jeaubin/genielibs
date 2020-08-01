@@ -280,11 +280,11 @@ class Resolver(object):
                     self.walk_decisions(device_decision_order, link_decision_order[1:], walker)
         elif device_decision_order:
             device_name = device_decision_order[0]
-            for decision in walker(object_type='device', object_name=device_name):
+            for _ in walker(object_type='device', object_name=device_name):
                 with JumpContext(device_name):
                     self.walk_decisions(device_decision_order[1:], self.link_decision_order_by_device[device_name], walker)
         else:
-            for decision in walker(object_type='solution', object_name='SOLUTION'):
+            for _ in walker(object_type='solution', object_name='SOLUTION'):
                 pass
 
     def _solution(self):
@@ -527,10 +527,10 @@ class Resolver(object):
 
     def _test_possible_link_parts_intersect(self, l_link_parts1, link_parts2):
         link_parts2 = set(link_parts2)
-        for link_parts1 in l_link_parts1:
-            if not link_parts2.isdisjoint(link_parts1):
-                return True
-        return False
+        return any(
+            not link_parts2.isdisjoint(link_parts1)
+            for link_parts1 in l_link_parts1
+        )
 
     def ChooseDeviceGenerator(self, device_name, xos_devices):
         try:
@@ -636,7 +636,6 @@ class Resolver(object):
 
         elif object_type == 'solution':
             self._solution()
-            pass
         else:
             raise ValueError(object_type)
 
@@ -673,7 +672,6 @@ class Resolver(object):
         else:
             if self._trace.preserve:
                 logger.debug('Preserve %s: %r', device_name, self._explain_read_counts_diff(device_name, prev_read_counts))
-            pass
 
     def _reject_link(self, link_name, xos_link_parts, xos_link_parts_list, prev_read_counts):
         # _incr_object_stat reject link $link_name
@@ -687,7 +685,6 @@ class Resolver(object):
         else:
             if self._trace.preserve:
                 logger.debug('Preserve %s: %r', link_name, self._explain_read_counts_diff(link_name, prev_read_counts))
-            pass
 
     def noop(self, *args):
         pass
@@ -965,7 +962,7 @@ class TopologyMapper(object):
     def reverse_query(self, obj):
         '''Query the constraint name assigned to the given object.'''
         assignments = self.assignments
-        for s, assigned_obj in self.assignments.items():
+        for s, assigned_obj in assignments.items():
             if assigned_obj is obj:
                 return s
         raise ValueError(obj)
@@ -1070,14 +1067,13 @@ class TopologyMapper(object):
 
     def __getattr__(self, name):
         '''Provide access to assigned objects as attributes.'''
-        if not name.startswith('_'):
-            if name != 'assignments':
-                assignments = self.assignments
-                if assignments is not None:
-                    try:
-                        return assignments[name]
-                    except KeyError:
-                        pass
+        if not name.startswith('_') and name != 'assignments':
+            assignments = self.assignments
+            if assignments is not None:
+                try:
+                    return assignments[name]
+                except KeyError:
+                    pass
         sup = getattr(super(), '__getattr__', None)
         if sup:
             return sup(name)
@@ -1445,9 +1441,11 @@ class TopologyMapper(object):
                                     continue
                                 if intf1.device not in dynobj_mappings[group_name][device_name1]:
                                     continue
-                                if object_constraints.interface is not None:
-                                    if intf1.name not in object_constraints.interface:
-                                        continue
+                                if (
+                                    object_constraints.interface is not None
+                                    and intf1.name not in object_constraints.interface
+                                ):
+                                    continue
                                 # intf1 matches
                                 for iintf2, intf2 in enumerate(interfaces):
                                     if iintf1 == iintf2:
@@ -1456,9 +1454,11 @@ class TopologyMapper(object):
                                         continue
                                     if intf2.device not in dynobj_mappings[group_name][device_name2]:
                                         continue
-                                    if object_constraints.interface is not None:
-                                        if intf2.name not in object_constraints.interface:
-                                            continue
+                                    if (
+                                        object_constraints.interface is not None
+                                        and intf2.name not in object_constraints.interface
+                                    ):
+                                        continue
                                     break  # intf2 matches
                                 else:
                                     continue  # no intf2 matches
@@ -1802,8 +1802,7 @@ class TopologyMapper(object):
         raise FailedToResolveException(self)
 
     def log_diagram(self):
-        legend = []
-        legend.append('Topology assignments:')
+        legend = ['Topology assignments:']
         assigned_object_names = set(self.assignments.keys())
         assigned_device_names = self.device_names & assigned_object_names
         assigned_link_names = self.link_names & assigned_object_names

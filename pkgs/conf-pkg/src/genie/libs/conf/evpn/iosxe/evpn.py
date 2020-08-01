@@ -38,9 +38,11 @@ class Evpn(ABC):
                 if unconfig and attributes.iswildcard:
                     configurations.submode_unconfig()
 
-                if attributes.value('arp_flooding_suppression') is not None:
-                    if attributes.value('arp_flooding_suppression') is False:
-                        configurations.append('arp flooding-suppression disable')
+                if (
+                    attributes.value('arp_flooding_suppression') is not None
+                    and attributes.value('arp_flooding_suppression') is False
+                ):
+                    configurations.append('arp flooding-suppression disable')
 
                 configurations.append_line(attributes.format('replication-type {replication_type}'))
                 configurations.append_line(attributes.format('mpls label mode {label_mode}'))

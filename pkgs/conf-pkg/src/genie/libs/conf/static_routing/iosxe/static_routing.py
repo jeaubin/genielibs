@@ -166,16 +166,15 @@ class StaticRouting(ABC):
                                 join_all += " vrf {}".format(attributes.value('vrf'))
 
                             if attributes.value('route'):
-                                if 'ipv6' in attributes.value('af').value:
-                                    join_all += " {}".format(attributes.value('route'))
+                                if 'ipv6' not in attributes.value(
+                                    'af'
+                                ).value and '/' in attributes.value('route'):
+                                    network_netmask = IPNetwork(attributes.value('route'))
+                                    network = str(network_netmask.network)
+                                    netmask = str(network_netmask.netmask)
+                                    join_all += " {} {}".format(network,netmask)
                                 else:
-                                    if '/' in attributes.value('route'):
-                                        network_netmask = IPNetwork(attributes.value('route'))
-                                        network = str(network_netmask.network)
-                                        netmask = str(network_netmask.netmask)
-                                        join_all += " {} {}".format(network,netmask)
-                                    else:
-                                        join_all += " {}".format(attributes.value('route'))
+                                    join_all += " {}".format(attributes.value('route'))
 
                             if attributes.value('interface'):
                                 join_all += " {}".format(attributes.value('interface'))
@@ -226,16 +225,15 @@ class StaticRouting(ABC):
                                 join_all += " vrf {}".format(attributes.value('vrf'))
 
                             if attributes.value('route'):
-                                if 'ipv6' in attributes.value('af').value:
-                                    join_all += " {}".format(attributes.value('route'))
+                                if 'ipv6' not in attributes.value(
+                                    'af'
+                                ).value and '/' in attributes.value('route'):
+                                    network_netmask = IPNetwork(attributes.value('route'))
+                                    network = str(network_netmask.network)
+                                    netmask = str(network_netmask.netmask)
+                                    join_all += " {} {}".format(network,netmask)
                                 else:
-                                    if '/' in attributes.value('route'):
-                                        network_netmask = IPNetwork(attributes.value('route'))
-                                        network = str(network_netmask.network)
-                                        netmask = str(network_netmask.netmask)
-                                        join_all += " {} {}".format(network,netmask)
-                                    else:
-                                        join_all += " {}".format(attributes.value('route'))
+                                    join_all += " {}".format(attributes.value('route'))
 
                             if attributes.value('nexthop'):
                                 join_all += ' {}'.format(attributes.value('nexthop'))

@@ -644,9 +644,8 @@ class SubInterface(VirtualInterface, genie.libs.conf.interface.SubInterface):
     def __new__(cls, *args, **kwargs):
 
         factory_cls = cls
-        if cls is SubInterface:
-            if 'service_instance' in kwargs:
-                factory_cls = EFPInterface
+        if cls is SubInterface and 'service_instance' in kwargs:
+            factory_cls = EFPInterface
 
         if factory_cls is not cls:
             self = factory_cls.__new__(factory_cls, *args, **kwargs)
@@ -666,20 +665,12 @@ class SubInterface(VirtualInterface, genie.libs.conf.interface.SubInterface):
             cfg = attributes.format('encapsulation {eth_encap_type1}', force=True)
             v = attributes.value('eth_encap_val1', force=True)
             if v is not None:
-                if type(v) is range:
-                    cfg += ' {}-{}'.format(v.start, v[-1])
-                else:
-                    cfg += ' {}'.format(v)
-
+                cfg += ' {}-{}'.format(v.start, v[-1]) if type(v) is range else ' {}'.format(v)
                 if attributes.value('eth_encap_val2', force=True) is not None:
                     cfg += attributes.format(' {eth_encap_type2}', force=True)
                     v = attributes.value('eth_encap_val2', force=True)
                     if v is not None:
-                        if type(v) is range:
-                            cfg += ' {}-{}'.format(v.start, v[-1])
-                        else:
-                            cfg += ' {}'.format(v)
-
+                        cfg += ' {}-{}'.format(v.start, v[-1]) if type(v) is range else ' {}'.format(v)
             configurations.append_line(cfg)
 
         super()._build_config_interface_submode(configurations, attributes, unconfig)

@@ -128,7 +128,5 @@ class BaseSNMPPowerCycler(PowerCycler):
 
     def get_state(self, *outlets):
 
-        outlet_ids = []
-        for outlet in outlets:
-            outlet_ids.append('.'.join([self.oid, str(outlet)]))
+        outlet_ids = ['.'.join([self.oid, str(outlet)]) for outlet in outlets]
         return self.snmp_client.snmp_get(*outlet_ids)

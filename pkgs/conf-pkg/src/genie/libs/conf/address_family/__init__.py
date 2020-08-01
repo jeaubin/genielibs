@@ -189,11 +189,10 @@ class AddressFamilySubAttributes(KeyedSubAttributes):
                 '{cls} only accepts AddressFamily values, not {key!r}'.
                 format(cls=cls.__name__, key=key))
         allowed_keys = getattr(cls, 'allowed_keys', None)
-        if allowed_keys is not None:
-            if key not in allowed_keys:
-                raise KeyError(
-                    '{cls} only accepts {allowed_keys}, not {key!r}'.\
-                    format(cls=cls.__name__,
-                           allowed_keys=allowed_keys,
-                           key=key))
+        if allowed_keys is not None and key not in allowed_keys:
+            raise KeyError(
+                '{cls} only accepts {allowed_keys}, not {key!r}'.\
+                format(cls=cls.__name__,
+                       allowed_keys=allowed_keys,
+                       key=key))
 

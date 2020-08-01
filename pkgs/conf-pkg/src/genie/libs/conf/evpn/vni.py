@@ -67,18 +67,16 @@ class Vni(ConfigurableBase):
     def nve(self):
         old_nve = self.nve
         del self._nve  # may raise AttributeError
-        if old_nve is not None:
-            if self in old_nve.vnis:
-                old_nve.remove_vni(self)
+        if old_nve is not None and self in old_nve.vnis:
+            old_nve.remove_vni(self)
 
     @nve.setter
     def nve(self, nve):
         if nve is not None and not isinstance(nve, NveInterface):
             raise ValueError(nve)
         old_nve = self.nve
-        if old_nve is not None:
-            if self in old_nve.vnis:
-                old_nve.remove_vni(self)
+        if old_nve is not None and self in old_nve.vnis:
+            old_nve.remove_vni(self)
         self._nve = None
         if nve is not None:
             if nve.vnis_map.get(self.vni_id, None) is not self:

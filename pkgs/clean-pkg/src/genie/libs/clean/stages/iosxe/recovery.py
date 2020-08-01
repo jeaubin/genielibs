@@ -29,14 +29,12 @@ def sendbrk_handler(spawn, break_count):
             None
     '''
 
-    count = 1
     xe_patterns = IosXEReloadPatterns()
-    while count <= break_count:
+    for _ in range(1, break_count + 1):
         spawn.send("\035")
         spawn.expect([xe_patterns.telnet_prompt])
         spawn.send("send brk\r\r")
         time.sleep(1)
-        count += 1
 
 
 def recovery_worker(*args, **kwargs):

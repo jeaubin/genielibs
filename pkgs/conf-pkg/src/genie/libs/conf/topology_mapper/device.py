@@ -53,8 +53,8 @@ class Device(ATSDevice):
     @property
     def next_interface_name(self):
         I = len(self.interfaces) + 1
+        sRI = '%sI%d' % (self.name, I)
         while True:
-            sRI = '%sI%d' % (self.name, I)
             if sRI not in self.interfaces:
                 return sRI
 

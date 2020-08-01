@@ -152,16 +152,13 @@ class Isis(Routing, DeviceFeature, InterfaceFeature, LinkFeature):
         '''
         area_addresses = self.area_addresses
         if area_addresses:
-            for area_address in sorted(self.area_addresses):
+            for area_address in sorted(area_addresses):
                 return area_address
         return None
 
     @area_address.setter
     def area_address(self, value):
-        if value is None:
-            self.area_addresses = None
-        else:
-            self.area_addresses = {value}
+        self.area_addresses = None if value is None else {value}
 
     @area_address.deleter
     def area_address(self):
@@ -337,9 +334,10 @@ class Isis(Routing, DeviceFeature, InterfaceFeature, LinkFeature):
             Please assign using `system_id`, `area_addresses` or `net_id`.
             '''
             system_id = self.system_id
-            return frozenset([
+            return frozenset(
                 IsisNET(area_address=area_address, system_id=system_id)
-                for area_address in self.area_addresses])
+                for area_address in self.area_addresses
+            )
 
         @property
         def net_id(self):

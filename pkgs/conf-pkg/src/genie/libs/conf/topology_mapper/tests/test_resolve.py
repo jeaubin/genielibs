@@ -132,8 +132,9 @@ class TestResolve(unittest.TestCase):
                 genie_testbed.find_devices(os=Or('iosxr')))
 
         self.assertSetEqual(
-                set([device.os for device in genie_testbed.find_devices(os=Or('iosxr'))]),
-                set(['iosxr']))
+            {device.os for device in genie_testbed.find_devices(os=Or('iosxr'))},
+            set(['iosxr']),
+        )
 
 if __name__ == "__main__":
     unittest.main()

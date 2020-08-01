@@ -549,7 +549,7 @@ class Interface(BaseInterface):
             # need to load the correct interface for the right os.
             if 'device' in kwargs:
                 device = kwargs['device']
-                if not device.os and 'os' in kwargs['device'].__dict__:
+                if not device.os and 'os' in device.__dict__:
                     device.os = kwargs['device'].__dict__['os']
                 if device.os is None:
                     raise AttributeError("Cannot convert interfaces for "
@@ -586,12 +586,10 @@ class Interface(BaseInterface):
 
         super().__init__(*args, **kwargs)
 
-        if 'ipv4' not in kwargs:
-            if self.ipv4:
-                self.testbed.ipv4_cache.reserve(self.ipv4)
-        if 'ipv6' not in kwargs:
-            if self.ipv6:
-                self.testbed.ipv6_cache.reserve(self.ipv6)
+        if 'ipv4' not in kwargs and self.ipv4:
+            self.testbed.ipv4_cache.reserve(self.ipv4)
+        if 'ipv6' not in kwargs and self.ipv6:
+            self.testbed.ipv6_cache.reserve(self.ipv6)
 
     parent_interface = managedattribute(
         name='parent_interface',
@@ -763,7 +761,7 @@ class Interface(BaseInterface):
                 'lo': 'Loopback',
             }[d_parsed.type.lower()]
         except KeyError:
-            for once in [1]:
+            for _ in [1]:
                 m = re.match(r'^o([01234](?:[EF][12]?)?)$', d_parsed.type, re.IGNORECASE)
                 if m:
                     d_parsed.type = 'OTU' + m.group(1).upper()
@@ -772,16 +770,16 @@ class Interface(BaseInterface):
                 if m:
                     d_parsed.type = 'ODU' + m.group(1).upper()
                     break
-            # There are still disambiguation issues for:
-            #   Port-channel
-            #   Service-Engine
-            #   ServiceApp
-            #   ServiceInfra
-            #   tunnel-ipsec
-            #   Virtual-Template
-            #   Virtual-TokenRing
-            #   MgmtIMA
-            #   MgmtMultilink
+                # There are still disambiguation issues for:
+                #   Port-channel
+                #   Service-Engine
+                #   ServiceApp
+                #   ServiceInfra
+                #   tunnel-ipsec
+                #   Virtual-Template
+                #   Virtual-TokenRing
+                #   MgmtIMA
+                #   MgmtMultilink
         # re-check for exact match
         if d_parsed.type in name_to_class_map:
             return d_parsed.reconstruct()
@@ -800,12 +798,11 @@ class Interface(BaseInterface):
                 re_pat = r'^{}.*-{}.*$'.format(re.escape(d_parsed.type[0]), re.escape(d_parsed.type[1]))
                 matches += [name for name in name_to_class_map
                             if re.match(re_pat, name, re.IGNORECASE)]
-        if len(matches) == 0:
+        if not matches:
             warnings.warn(
                 'Unknown interface type/name {!r}'.format(
                     d_parsed.reconstruct()),
                 UnknownInterfaceName)
-            pass
         elif len(matches) == 1:
             d_parsed.type = matches[0]
         else:
@@ -1068,10 +1065,10 @@ class EthernetInterface(PhysicalInterface):
     @eth_encap_type2.defaulter
     def eth_encap_type2(self):
         if self.eth_encap_val2 is not None:
-            if self.eth_encap_type1 == 'dot1q':
-                return 'second-dot1q'
             if self.eth_encap_type1 == 'dot1ad':
                 return 'dot1q'
+            elif self.eth_encap_type1 == 'dot1q':
+                return 'second-dot1q'
         return None
 
     eth_encap_val2 = managedattribute(
